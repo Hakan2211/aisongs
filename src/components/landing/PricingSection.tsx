@@ -1,57 +1,19 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { Check } from 'lucide-react'
+import { Check, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 
-const plans = [
-  {
-    name: 'Free',
-    price: '$0',
-    description: 'Perfect for trying out the platform',
-    features: [
-      'Basic features',
-      'Community support',
-      'Up to 100 requests/day',
-      'Email support',
-    ],
-    cta: 'Get Started',
-    href: '/signup',
-    popular: false,
-  },
-  {
-    name: 'Pro',
-    price: '$29',
-    period: '/month',
-    description: 'For professionals and growing teams',
-    features: [
-      'Everything in Free',
-      'Unlimited requests',
-      'Priority support',
-      'Advanced analytics',
-      'API access',
-      'Custom integrations',
-    ],
-    cta: 'Start Free Trial',
-    href: '/signup',
-    popular: true,
-  },
-  {
-    name: 'Enterprise',
-    price: 'Custom',
-    description: 'For large organizations with specific needs',
-    features: [
-      'Everything in Pro',
-      'Dedicated support',
-      'Custom SLA',
-      'On-premise deployment',
-      'SSO/SAML',
-      'Audit logs',
-    ],
-    cta: 'Contact Sales',
-    href: '/pricing',
-    popular: false,
-  },
+const features = [
+  'Lifetime platform access',
+  'ElevenLabs Music generation',
+  'MiniMax Music generation',
+  'Unlimited track generations',
+  'Full track library management',
+  'Download in multiple formats',
+  'Reference audio support',
+  'Lyrics-based generation',
+  'Future model updates included',
+  'Priority support',
 ]
 
 export function PricingSection() {
@@ -67,79 +29,101 @@ export function PricingSection() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            Simple, transparent pricing
+            One price. Lifetime access.
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Choose the plan that works best for you. All plans include a 14-day
-            free trial.
+            No subscriptions, no hidden fees. Pay once and create unlimited AI
+            music forever. You only pay for your own API usage.
           </p>
         </motion.div>
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {plans.map((plan, index) => (
-            <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <PricingCard plan={plan} />
-            </motion.div>
-          ))}
-        </div>
+        {/* Single Pricing Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="max-w-lg mx-auto"
+        >
+          <div className="relative rounded-2xl border-2 border-primary bg-card p-8 shadow-xl">
+            {/* Badge */}
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-semibold text-primary-foreground flex items-center gap-1">
+              <Sparkles className="h-3 w-3" />
+              Lifetime Deal
+            </span>
+
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-semibold mb-4">AI Music Studio</h3>
+              <div className="flex items-baseline justify-center gap-2">
+                <span className="text-5xl font-bold">€99</span>
+                <span className="text-muted-foreground">one-time</span>
+              </div>
+              <p className="text-sm text-muted-foreground mt-3">
+                Full platform access + all future updates
+              </p>
+            </div>
+
+            {/* Features */}
+            <ul className="space-y-3 mb-8">
+              {features.map((feature) => (
+                <li key={feature} className="flex items-center gap-3">
+                  <Check className="h-5 w-5 text-primary shrink-0" />
+                  <span className="text-sm">{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* CTA */}
+            <Link to="/signup" className="block">
+              <Button className="w-full" size="lg">
+                Get Lifetime Access
+              </Button>
+            </Link>
+
+            {/* Note */}
+            <p className="text-xs text-muted-foreground text-center mt-4">
+              Bring your own API keys. You pay providers directly for usage.
+            </p>
+          </div>
+        </motion.div>
+
+        {/* BYOK Explanation */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-16 max-w-3xl mx-auto text-center"
+        >
+          <h3 className="text-xl font-semibold mb-4">
+            How does Bring Your Own Key work?
+          </h3>
+          <div className="grid md:grid-cols-3 gap-6 text-sm">
+            <div className="p-4 rounded-lg bg-card border">
+              <div className="font-medium mb-2">1. Get API Keys</div>
+              <p className="text-muted-foreground">
+                Sign up for fal.ai and get your API key. They offer generous
+                free tiers to get started.
+              </p>
+            </div>
+            <div className="p-4 rounded-lg bg-card border">
+              <div className="font-medium mb-2">2. Add to Studio</div>
+              <p className="text-muted-foreground">
+                Securely add your API keys in Settings. Keys are encrypted and
+                never shared.
+              </p>
+            </div>
+            <div className="p-4 rounded-lg bg-card border">
+              <div className="font-medium mb-2">3. Pay-as-you-go</div>
+              <p className="text-muted-foreground">
+                Only pay for what you use. Typical track costs $0.01-0.05
+                depending on length.
+              </p>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
-  )
-}
-
-function PricingCard({ plan }: { plan: (typeof plans)[0] }) {
-  return (
-    <div
-      className={cn(
-        'relative h-full rounded-xl border bg-card p-6 shadow-sm',
-        plan.popular && 'border-primary shadow-lg scale-105',
-      )}
-    >
-      {/* Popular badge */}
-      {plan.popular && (
-        <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-semibold text-primary-foreground">
-          Most Popular
-        </span>
-      )}
-
-      {/* Header */}
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-        <div className="flex items-baseline gap-1">
-          <span className="text-4xl font-bold">{plan.price}</span>
-          {plan.period && (
-            <span className="text-muted-foreground">{plan.period}</span>
-          )}
-        </div>
-        <p className="text-sm text-muted-foreground mt-2">{plan.description}</p>
-      </div>
-
-      {/* Features */}
-      <ul className="space-y-3 mb-8">
-        {plan.features.map((feature) => (
-          <li key={feature} className="flex items-center gap-3">
-            <Check className="h-4 w-4 text-primary shrink-0" />
-            <span className="text-sm">{feature}</span>
-          </li>
-        ))}
-      </ul>
-
-      {/* CTA */}
-      <Link to={plan.href} className="block">
-        <Button
-          className="w-full"
-          variant={plan.popular ? 'default' : 'outline'}
-        >
-          {plan.cta}
-        </Button>
-      </Link>
-    </div>
   )
 }

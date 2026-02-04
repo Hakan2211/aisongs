@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Music } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export function CTASection() {
@@ -14,12 +14,17 @@ export function CTASection() {
           transition={{ duration: 0.5 }}
           className="text-center max-w-3xl mx-auto"
         >
+          <div className="flex justify-center mb-6">
+            <div className="p-3 rounded-full bg-primary-foreground/10">
+              <Music className="h-8 w-8" />
+            </div>
+          </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6">
-            Ready to build something amazing?
+            Ready to create your first track?
           </h2>
           <p className="text-lg md:text-xl opacity-90 mb-10">
-            Join thousands of developers who are shipping faster with our
-            starter template. Get started in minutes, not weeks.
+            Join creators using AI Music Studio to generate professional-quality
+            music. One-time payment, lifetime access, unlimited creativity.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/signup">
@@ -28,11 +33,11 @@ export function CTASection() {
                 variant="secondary"
                 className="min-w-[180px] group"
               >
-                Start Building Free
+                Get Started Now
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
-            <Link to="/pricing">
+            <a href="#pricing">
               <Button
                 size="lg"
                 variant="outline"
@@ -40,8 +45,11 @@ export function CTASection() {
               >
                 View Pricing
               </Button>
-            </Link>
+            </a>
           </div>
+          <p className="text-sm opacity-70 mt-8">
+            No credit card required to sign up. Add API keys when you're ready.
+          </p>
         </motion.div>
       </div>
     </section>

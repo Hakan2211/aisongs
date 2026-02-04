@@ -1,15 +1,17 @@
 import { Link } from '@tanstack/react-router'
+import { Logo } from '@/components/common'
 
 const footerLinks = {
   product: [
     { label: 'Features', href: '#features' },
+    { label: 'How it Works', href: '#how-it-works' },
     { label: 'Pricing', href: '#pricing' },
     { label: 'FAQ', href: '#faq' },
   ],
   resources: [
-    { label: 'Documentation', href: '#' },
-    { label: 'GitHub', href: '#' },
-    { label: 'Discord', href: '#' },
+    { label: 'fal.ai', href: 'https://fal.ai' },
+    { label: 'ElevenLabs', href: 'https://elevenlabs.io' },
+    { label: 'MiniMax', href: 'https://minimax.io' },
   ],
   legal: [
     { label: 'Privacy', href: '/privacy' },
@@ -35,11 +37,12 @@ export function LandingFooter() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="h-8 w-8 rounded-lg bg-primary shadow-md" />
-              <span className="text-xl font-bold">AppStarter</span>
+              <Logo size="sm" />
+              <span className="text-xl font-bold">AI Music Studio</span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-xs">
-              The fastest way to build and ship your SaaS product.
+              Create professional AI music with your own API keys. One-time
+              payment, lifetime access.
             </p>
           </div>
 
@@ -83,10 +86,11 @@ export function LandingFooter() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} AppStarter. All rights reserved.
+            &copy; {new Date().getFullYear()} AI Music Studio. All rights
+            reserved.
           </p>
           <p className="text-sm text-muted-foreground">
-            Built with TanStack Start
+            Powered by ElevenLabs & MiniMax via fal.ai
           </p>
         </div>
       </div>

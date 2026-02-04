@@ -10,7 +10,7 @@ export const Route = createFileRoute('/_auth')({
   beforeLoad: async () => {
     const session = await getSessionFn()
     if (session?.user) {
-      throw redirect({ to: '/dashboard' })
+      throw redirect({ to: '/music' })
     }
   },
   component: AuthLayout,

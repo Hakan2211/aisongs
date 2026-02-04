@@ -8,34 +8,49 @@ import {
 
 const faqs = [
   {
-    question: 'What is included in the starter template?',
+    question: 'What is the Bring Your Own Key (BYOK) model?',
     answer:
-      'The template includes authentication (email/password + OAuth), database setup with Prisma, Stripe payment integration, Shadcn UI components, and Docker deployment configuration. Everything you need to start building a SaaS product.',
+      'BYOK means you use your own API keys from providers like fal.ai to generate music. You pay the providers directly for usage, which is typically much cheaper than platform markups. We never see your API bills - you have full control and transparency over costs.',
   },
   {
-    question: 'Do I need to pay for the template?',
+    question: 'Which AI music models are supported?',
     answer:
-      'The template itself is free and open source. You only pay for the services you choose to use (hosting, Stripe fees, etc.). We also offer premium support plans if you need dedicated help.',
+      'Currently we support ElevenLabs Music (great for instrumentals and songs with vocals) and MiniMax Music (excellent for lyrics-based generation and reference audio styling). We plan to add more models as they become available.',
   },
   {
-    question: 'What database does it support?',
+    question: 'How much does it cost to generate a track?',
     answer:
-      'Out of the box, the template uses SQLite with Prisma ORM. For production, you can easily switch to Turso (SQLite at the edge) or use Litestream for SQLite replication. Prisma also supports PostgreSQL, MySQL, and other databases.',
+      'The platform itself is a one-time €99 payment. For API usage, typical costs are $0.01-0.05 per track depending on the model and track length. fal.ai offers free credits to get started, so you can try before committing to paid usage.',
   },
   {
-    question: 'How do I deploy the application?',
+    question: 'Do I own the music I generate?',
     answer:
-      'The template includes a Dockerfile and GitHub Actions workflow for CI/CD. You can deploy to any platform that supports Docker containers - Railway, Fly.io, Render, Coolify, or your own VPS.',
+      'Yes! Music generated through AI Music Studio is yours to use. However, please check the specific terms of the AI model providers (ElevenLabs, MiniMax) for their commercial usage policies, as these may vary.',
   },
   {
-    question: 'Can I use this for commercial projects?',
+    question: 'Are my API keys secure?',
     answer:
-      'Absolutely! The template is licensed under MIT, which means you can use it for any purpose, including commercial projects. No attribution required.',
+      'Absolutely. Your API keys are encrypted using AES-256-GCM encryption before being stored. Keys are only decrypted server-side when making API calls and are never exposed to the browser or logged.',
   },
   {
-    question: 'How do I get support?',
+    question: 'What happens if new AI models are released?',
     answer:
-      'For community support, you can open issues on GitHub or join our Discord server. For enterprise customers, we offer dedicated support with guaranteed response times.',
+      'Your lifetime access includes all future updates to the platform, including new AI models as we add support for them. No additional payment required.',
+  },
+  {
+    question: 'Can I use this commercially?',
+    answer:
+      'Yes, you can use AI Music Studio for commercial projects. Just ensure you comply with the terms of service of the underlying AI providers regarding commercial use of generated content.',
+  },
+  {
+    question: 'How do I get started with fal.ai?',
+    answer:
+      'Sign up at fal.ai, navigate to your dashboard to get your API key, then paste it in the Settings page of AI Music Studio. fal.ai provides free credits to new users, so you can start generating immediately.',
+  },
+  {
+    question: 'Where is my generated audio stored?',
+    answer:
+      'By default, generated audio is stored temporarily on the AI provider servers and may expire. For permanent storage, you can connect your own Bunny.net CDN account in Settings. Audio will then be automatically uploaded to your CDN for reliable, long-term access. This is also BYOK - you bring your own storage and only pay for what you use.',
   },
 ]
 
@@ -55,8 +70,8 @@ export function FAQSection() {
             Frequently asked questions
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Got questions? We've got answers. If you can't find what you're
-            looking for, feel free to reach out.
+            Everything you need to know about AI Music Studio and the BYOK
+            model.
           </p>
         </motion.div>
 

@@ -1,60 +1,53 @@
 import { motion } from 'framer-motion'
-import {
-  CreditCard,
-  Database,
-  Lock,
-  Paintbrush,
-  Shield,
-  Zap,
-} from 'lucide-react'
+import { Key, Music, Mic2, Lock, Download, Infinity } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const features = [
   {
-    icon: Lock,
-    title: 'Authentication',
+    icon: Key,
+    title: 'Bring Your Own Key',
     description:
-      'Email/password and OAuth with Better-Auth. Session management and RBAC built-in.',
+      'Use your own fal.ai and MiniMax API keys. No middleman markup, direct access to AI providers.',
     color: 'text-blue-500',
     bgColor: 'bg-blue-500/10',
   },
   {
-    icon: CreditCard,
-    title: 'Payments',
+    icon: Music,
+    title: 'ElevenLabs Music',
     description:
-      'Stripe integration with subscription management. Mock mode for development.',
+      'Generate professional instrumental and vocal music from text descriptions. Perfect for any style.',
     color: 'text-green-500',
     bgColor: 'bg-green-500/10',
   },
   {
-    icon: Database,
-    title: 'Database',
+    icon: Mic2,
+    title: 'MiniMax Music',
     description:
-      'SQLite with Prisma ORM. Production-ready with Turso/Litestream support.',
+      'Create music with your own lyrics using reference tracks. Full control over vocals and style.',
     color: 'text-purple-500',
     bgColor: 'bg-purple-500/10',
   },
   {
-    icon: Paintbrush,
-    title: 'UI Components',
+    icon: Lock,
+    title: 'Secure & Private',
     description:
-      'Shadcn UI with Tailwind CSS. Beautiful, accessible, and customizable.',
-    color: 'text-pink-500',
-    bgColor: 'bg-pink-500/10',
-  },
-  {
-    icon: Shield,
-    title: 'Security',
-    description:
-      'CSRF protection, honeypot fields, rate limiting, and secure headers.',
+      'Your API keys are encrypted with AES-256-GCM. We never store or see your keys in plaintext.',
     color: 'text-orange-500',
     bgColor: 'bg-orange-500/10',
   },
   {
-    icon: Zap,
-    title: 'Performance',
+    icon: Download,
+    title: 'Download & Own',
     description:
-      'Server-side rendering, code splitting, and optimized bundle size.',
+      'Download your generated music as MP3. Full ownership of everything you create.',
+    color: 'text-pink-500',
+    bgColor: 'bg-pink-500/10',
+  },
+  {
+    icon: Infinity,
+    title: 'Unlimited Generations',
+    description:
+      'No generation limits from us. Only pay for what you use directly to AI providers.',
     color: 'text-yellow-500',
     bgColor: 'bg-yellow-500/10',
   },
@@ -73,11 +66,11 @@ export function FeaturesSection() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            Everything you need to build
+            Powerful AI Music Generation
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Pre-configured with best practices and modern tooling so you can
-            focus on what matters - your product.
+            Access cutting-edge AI music models with your own API keys. No
+            subscriptions, no per-generation fees from us.
           </p>
         </motion.div>
 

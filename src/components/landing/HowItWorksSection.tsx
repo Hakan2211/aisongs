@@ -1,26 +1,26 @@
 import { motion } from 'framer-motion'
-import { Code, Rocket, Settings } from 'lucide-react'
+import { Key, Music, Download } from 'lucide-react'
 
 const steps = [
   {
-    icon: Code,
-    title: 'Clone & Install',
+    icon: Key,
+    title: 'Add Your API Keys',
     description:
-      'Clone the repository and install dependencies. Set up your environment variables in minutes.',
+      'Sign up and add your fal.ai API key in settings. Your keys are encrypted and stored securely.',
     step: '01',
   },
   {
-    icon: Settings,
-    title: 'Configure',
+    icon: Music,
+    title: 'Generate Music',
     description:
-      'Customize the template to your needs. Update branding, add features, connect services.',
+      'Describe your music or write lyrics. Choose between ElevenLabs or MiniMax models and hit generate.',
     step: '02',
   },
   {
-    icon: Rocket,
-    title: 'Deploy',
+    icon: Download,
+    title: 'Download & Use',
     description:
-      'Deploy to your preferred platform with Docker. CI/CD pipeline included for automated deployments.',
+      'Listen to your generated tracks, download as MP3, and use them however you want. You own it.',
     step: '03',
   },
 ]
@@ -41,7 +41,7 @@ export function HowItWorksSection() {
             How it works
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Get from zero to production in three simple steps.
+            Start creating AI music in three simple steps.
           </p>
         </motion.div>
 

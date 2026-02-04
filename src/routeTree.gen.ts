@@ -15,8 +15,10 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
-import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppMusicRouteImport } from './routes/_app/music'
+import { Route as AppLibraryRouteImport } from './routes/_app/library'
 import { Route as AppAdminRouteImport } from './routes/_app/admin'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
@@ -48,14 +50,24 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRoute,
 } as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => AppRoute,
 } as any)
-const AppDashboardRoute = AppDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const AppMusicRoute = AppMusicRouteImport.update({
+  id: '/music',
+  path: '/music',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLibraryRoute = AppLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAdminRoute = AppAdminRouteImport.update({
@@ -73,8 +85,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/admin': typeof AppAdminRoute
-  '/dashboard': typeof AppDashboardRoute
+  '/library': typeof AppLibraryRoute
+  '/music': typeof AppMusicRoute
   '/profile': typeof AppProfileRoute
+  '/settings': typeof AppSettingsRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -83,8 +97,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/admin': typeof AppAdminRoute
-  '/dashboard': typeof AppDashboardRoute
+  '/library': typeof AppLibraryRoute
+  '/music': typeof AppMusicRoute
   '/profile': typeof AppProfileRoute
+  '/settings': typeof AppSettingsRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -96,8 +112,10 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/pricing': typeof PricingRoute
   '/_app/admin': typeof AppAdminRoute
-  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/library': typeof AppLibraryRoute
+  '/_app/music': typeof AppMusicRoute
   '/_app/profile': typeof AppProfileRoute
+  '/_app/settings': typeof AppSettingsRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -108,8 +126,10 @@ export interface FileRouteTypes {
     | '/'
     | '/pricing'
     | '/admin'
-    | '/dashboard'
+    | '/library'
+    | '/music'
     | '/profile'
+    | '/settings'
     | '/login'
     | '/signup'
     | '/api/auth/$'
@@ -118,8 +138,10 @@ export interface FileRouteTypes {
     | '/'
     | '/pricing'
     | '/admin'
-    | '/dashboard'
+    | '/library'
+    | '/music'
     | '/profile'
+    | '/settings'
     | '/login'
     | '/signup'
     | '/api/auth/$'
@@ -130,8 +152,10 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/pricing'
     | '/_app/admin'
-    | '/_app/dashboard'
+    | '/_app/library'
+    | '/_app/music'
     | '/_app/profile'
+    | '/_app/settings'
     | '/_auth/login'
     | '/_auth/signup'
     | '/api/auth/$'
@@ -189,6 +213,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/profile': {
       id: '/_app/profile'
       path: '/profile'
@@ -196,11 +227,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/dashboard': {
-      id: '/_app/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AppDashboardRouteImport
+    '/_app/music': {
+      id: '/_app/music'
+      path: '/music'
+      fullPath: '/music'
+      preLoaderRoute: typeof AppMusicRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/library': {
+      id: '/_app/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof AppLibraryRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/admin': {
@@ -222,14 +260,18 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRoute
-  AppDashboardRoute: typeof AppDashboardRoute
+  AppLibraryRoute: typeof AppLibraryRoute
+  AppMusicRoute: typeof AppMusicRoute
   AppProfileRoute: typeof AppProfileRoute
+  AppSettingsRoute: typeof AppSettingsRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRoute,
-  AppDashboardRoute: AppDashboardRoute,
+  AppLibraryRoute: AppLibraryRoute,
+  AppMusicRoute: AppMusicRoute,
   AppProfileRoute: AppProfileRoute,
+  AppSettingsRoute: AppSettingsRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

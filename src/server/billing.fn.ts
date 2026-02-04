@@ -25,7 +25,7 @@ export const createCheckoutFn = createServerFn({ method: 'POST' })
     const result = await createCheckoutSession(
       context.user.id,
       priceId,
-      `${baseUrl}/dashboard?success=true`,
+      `${baseUrl}/music?success=true`,
       `${baseUrl}/pricing?canceled=true`,
     )
 
@@ -52,7 +52,7 @@ export const createBillingPortalFn = createServerFn({ method: 'POST' })
 
     const result = await createBillingPortalSession(
       context.user.id,
-      `${baseUrl}/dashboard`,
+      `${baseUrl}/profile`,
     )
 
     return result

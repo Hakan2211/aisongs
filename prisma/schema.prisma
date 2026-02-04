@@ -36,6 +36,39 @@ model User {
   // Onboarding (optional - for multi-step onboarding flows)
   onboardingComplete Boolean @default(false)
 
+  // ====================================================================================
+  // Platform Access (one-time payment for lifetime access)
+  // ====================================================================================
+  hasPlatformAccess       Boolean   @default(false) // Set true after one-time payment
+  platformPurchaseDate    DateTime?                  // When they purchased platform access
+  platformStripePaymentId String?                    // Stripe payment_intent ID for reference
+
+  // ====================================================================================
+  // BYOK - Bring Your Own Key (API keys encrypted with AES-256-GCM)
+  // ====================================================================================
+  
+  // fal.ai API key (for ElevenLabs Music & MiniMax v2)
+  falApiKey        String?   // Encrypted API key
+  falApiKeyLastFour String?  // Last 4 chars for display (e.g., "...xxxx")
+  falApiKeyAddedAt DateTime? // When the key was added/updated
+
+  // MiniMax direct API key (for Music 2.5)
+  minimaxApiKey        String?   // Encrypted API key
+  minimaxApiKeyLastFour String?  // Last 4 chars for display
+  minimaxApiKeyAddedAt DateTime? // When the key was added/updated
+
+  // Bunny.net CDN (for audio storage)
+  bunnyApiKey         String?   // Encrypted Storage API key
+  bunnyApiKeyLastFour String?   // Last 4 chars for display
+  bunnyApiKeyAddedAt  DateTime? // When the key was added/updated
+  bunnyStorageZone    String?   // Storage Zone name (e.g., "my-music")
+  bunnyPullZone       String?   // Pull Zone hostname (e.g., "my-music")
+
+  // ====================================================================================
+  // Music Generation Relations
+  // ====================================================================================
+  musicGenerations MusicGeneration[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -119,4 +152,57 @@ model SubscriptionEvent {
   @@index([event])
   @@index([createdAt])
   @@map("subscription_event")
+}
+
+// ====================================================================================
+// Music Generation - Stores history of AI music generations
+// ====================================================================================
+
+model MusicGeneration {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Provider info
+  provider String // "elevenlabs", "minimax-v2", "minimax-v2.5"
+  model    String? // Specific model variant if applicable
+
+  // Input parameters
+  prompt       String  // Style/mood description
+  lyrics       String? // For MiniMax models (with [verse], [chorus] tags)
+  durationMs   Int?    // Requested duration in milliseconds
+  outputFormat String? // "mp3_44100_128", etc.
+  settings     String? // JSON - Additional model-specific settings
+
+  // Output
+  audioUrl        String?              // Final audio URL (CDN or temp)
+  originalAudioUrl String?             // Original fal.ai temp URL (before CDN upload)
+  audioStored     Boolean @default(false) // Whether audio is persisted to CDN
+  audioDurationMs Int?                 // Actual duration of generated audio
+  
+  // Job status
+  status String @default("pending") // "pending", "processing", "completed", "failed"
+  error  String? // Error message if failed
+
+  // External job tracking (fal.ai queue or MiniMax)
+  requestId   String? // External provider request ID
+  statusUrl   String? // URL to poll for status
+  responseUrl String? // URL to fetch result
+  cancelUrl   String? // URL to cancel job
+
+  // Progress (0-100)
+  progress Int @default(0)
+
+  // Metadata
+  title      String?              // User-provided or auto-generated title
+  isFavorite Boolean @default(false) // Whether track is favorited
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([provider])
+  @@index([createdAt])
+  @@map("music_generation")
 }

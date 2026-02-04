@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight, Music, Sparkles, Headphones } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export function HeroSection() {
@@ -17,6 +17,21 @@ export function HeroSection() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 -left-1/4 w-1/2 h-1/2 bg-primary/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-primary/5 rounded-full blur-3xl" />
+        {/* Music notes decoration */}
+        <motion.div
+          animate={{ y: [0, -10, 0], rotate: [0, 5, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-1/3 left-1/4 text-primary/10"
+        >
+          <Music className="h-24 w-24" />
+        </motion.div>
+        <motion.div
+          animate={{ y: [0, 10, 0], rotate: [0, -5, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute bottom-1/3 right-1/4 text-primary/10"
+        >
+          <Headphones className="h-32 w-32" />
+        </motion.div>
       </div>
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
@@ -30,7 +45,7 @@ export function HeroSection() {
           >
             <span className="inline-flex items-center gap-2 rounded-full border bg-background px-4 py-1.5 text-sm font-medium shadow-sm">
               <Sparkles className="h-4 w-4 text-primary" />
-              Built with TanStack Start
+              Bring Your Own API Key
             </span>
           </motion.div>
 
@@ -41,11 +56,11 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6"
           >
-            Ship your next{' '}
+            Create{' '}
             <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              SaaS product
+              AI Music
             </span>{' '}
-            in record time
+            with your own keys
           </motion.h1>
 
           {/* Subheadline */}
@@ -55,8 +70,9 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl"
           >
-            A production-ready starter template with authentication, payments,
-            database, and everything you need to go from idea to MVP.
+            Generate professional-quality music using ElevenLabs and MiniMax AI.
+            Pay once for lifetime access, use your own API keys, keep full
+            control.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -68,7 +84,7 @@ export function HeroSection() {
           >
             <Link to="/signup">
               <Button size="lg" className="min-w-[180px] group">
-                Start Building
+                Start Creating
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
@@ -90,10 +106,10 @@ export function HeroSection() {
             className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 border-t pt-8"
           >
             {[
-              { value: '10+', label: 'UI Components' },
-              { value: '100%', label: 'Type-Safe' },
-              { value: '< 5min', label: 'Setup Time' },
-              { value: 'Free', label: 'Open Source' },
+              { value: '2', label: 'AI Models' },
+              { value: 'BYOK', label: 'Your Keys' },
+              { value: 'Unlimited', label: 'Generations' },
+              { value: 'One-Time', label: 'Payment' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-2xl md:text-3xl font-bold text-primary">
