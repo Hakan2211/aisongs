@@ -146,39 +146,42 @@ async function falSubmitGeneration(
 
   let falInput: Record<string, unknown>
 
-  if (input.provider === 'elevenlabs') {
-    // ElevenLabs Music - prompt-based generation with duration & instrumental controls
-    falInput = {
-      prompt: input.prompt,
-      output_format: input.outputFormat || 'mp3_44100_128',
-    }
+  switch (input.provider) {
+    case 'elevenlabs':
+      // ElevenLabs Music - prompt-based generation with duration & instrumental controls
+      falInput = {
+        prompt: input.prompt,
+        output_format: input.outputFormat || 'mp3_44100_128',
+      }
 
-    // Add duration if specified (in milliseconds, 3000-600000)
-    if (input.durationMs) {
-      falInput.music_length_ms = input.durationMs
-    }
+      // Add duration if specified (in milliseconds, 3000-600000)
+      if (input.durationMs) {
+        falInput.music_length_ms = input.durationMs
+      }
 
-    // Force instrumental output (no vocals)
-    if (input.forceInstrumental) {
-      falInput.force_instrumental = true
-    }
-  } else if (input.provider === 'minimax-v2') {
-    // MiniMax Music v2 - requires prompt AND lyrics_prompt
-    if (!input.lyrics) {
-      throw new Error('MiniMax v2 requires lyrics')
-    }
+      // Force instrumental output (no vocals)
+      if (input.forceInstrumental) {
+        falInput.force_instrumental = true
+      }
+      break
+    case 'minimax-v2':
+      // MiniMax Music v2 - requires prompt AND lyrics_prompt
+      if (!input.lyrics) {
+        throw new Error('MiniMax v2 requires lyrics')
+      }
 
-    falInput = {
-      prompt: input.prompt, // Style/mood description (10-300 chars)
-      lyrics_prompt: input.lyrics, // Lyrics content (10-3000 chars)
-      audio_setting: {
-        sample_rate: input.audioSettings?.sampleRate || 44100,
-        bitrate: input.audioSettings?.bitrate || 256000,
-        format: input.audioSettings?.format || 'mp3',
-      },
-    }
-  } else {
-    throw new Error(`Unknown provider: ${input.provider}`)
+      falInput = {
+        prompt: input.prompt, // Style/mood description (10-300 chars)
+        lyrics_prompt: input.lyrics, // Lyrics content (10-3000 chars)
+        audio_setting: {
+          sample_rate: input.audioSettings?.sampleRate || 44100,
+          bitrate: input.audioSettings?.bitrate || 256000,
+          format: input.audioSettings?.format || 'mp3',
+        },
+      }
+      break
+    default:
+      throw new Error(`Unknown provider: ${input.provider}`)
   }
 
   const result = await fal.queue.submit(modelId, {
@@ -220,19 +223,28 @@ async function falCheckStatus(
     FAILED: 'FAILED',
   }
 
+  // Get the status string and logs (logs only exist on certain status types)
+  // Cast to string to handle any status values including ones not in the TS type
+  const statusString = status.status as string
+  const logs = 'logs' in status ? status.logs : undefined
+
+  // Get mapped status, defaulting to IN_PROGRESS for unknown statuses
+  const mappedStatus: MusicGenerationResult['status'] =
+    statusString in statusMap ? statusMap[statusString] : 'IN_PROGRESS'
+
   const result: MusicGenerationResult = {
     requestId,
-    status: statusMap[status.status] || 'IN_PROGRESS',
-    logs: status.logs?.map((log: { message: string }) => log.message),
+    status: mappedStatus,
+    logs: logs?.map((log: { message: string }) => log.message),
   }
 
-  // If completed, fetch the result
-  if (status.status === 'COMPLETED') {
+  // Handle different statuses
+  if (statusString === 'COMPLETED') {
     const fullResult = await fal.queue.result(modelId, { requestId })
     const data = fullResult.data as { audio?: { url?: string } }
-    result.audioUrl = data?.audio?.url
+    result.audioUrl = data.audio?.url
     result.progress = 100
-  } else if (status.status === 'FAILED') {
+  } else if (statusString === 'FAILED') {
     result.error = 'Generation failed'
   }
 

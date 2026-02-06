@@ -101,9 +101,9 @@ export function WaveformPlayer({
     // Detect dark mode for color adaptation
     const isDark = document.documentElement.classList.contains('dark')
 
-    // Professional solid colors with strong played/unplayed contrast:
-    // Dark mode: bright gold played, subtle white unplayed
+    // Professional colors with strong played/unplayed contrast
     // Light mode: vivid blue played, subtle dark unplayed
+    // Dark mode: bright gold played, subtle white unplayed
     const defaultWaveColor =
       waveColor ||
       (isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.18)')
@@ -118,9 +118,9 @@ export function WaveformPlayer({
       progressColor: defaultProgressColor,
       cursorColor: defaultCursorColor,
       cursorWidth: 2,
-      barWidth: 3,
+      barWidth: 2,
       barGap: 2,
-      barRadius: 3,
+      barRadius: 4,
       normalize: true,
       hideScrollbar: true,
       fillParent: true,
@@ -160,20 +160,14 @@ export function WaveformPlayer({
 
     ws.on('error', (err: Error) => {
       // Ignore AbortErrors - these happen during normal React cleanup
-      // when ws.destroy() is called while ws.load() is still in-flight
-      if (err.name === 'AbortError') {
-        return
-      }
-      if (err.message?.toLowerCase().includes('abort')) {
-        return
-      }
+      if (err.name === 'AbortError') return
+      if (err.message.toLowerCase().includes('abort')) return
       console.error('[WaveformPlayer] Error:', err)
       setError('Failed to load audio')
       setIsLoading(false)
     })
 
-    // Load audio -- catch the promise so that AbortError from destroy()
-    // aborting an in-flight fetch doesn't surface as unhandled rejection
+    // Load audio
     ws.load(src).catch((err: Error) => {
       if (err.name === 'AbortError') return
       console.error('[WaveformPlayer] Load error:', err)
@@ -183,14 +177,10 @@ export function WaveformPlayer({
       try {
         ws.destroy()
       } catch {
-        // WaveSurfer.destroy() throws AbortError when audio fetch is
-        // still in-flight. Expected during React Strict Mode double-invoke
-        // and normal component cleanup -- safe to ignore.
+        // Safe to ignore
       }
       wavesurferRef.current = null
     }
-    // Only re-initialize when src, visibility, or visual config changes.
-    // Callback props are handled via refs and don't need to be in deps.
   }, [isVisible, src, height, waveColor, progressColor, cursorColor, autoPlay])
 
   // Toggle play/pause
@@ -217,10 +207,14 @@ export function WaveformPlayer({
   if (compact) {
     return (
       <div className={cn('flex items-center gap-3', className)}>
+        {/* Premium play button */}
         <Button
-          size="icon"
-          variant="ghost"
-          className="h-8 w-8 shrink-0"
+          size="icon-sm"
+          variant={isPlaying ? 'default' : 'outline'}
+          className={cn(
+            'h-9 w-9 shrink-0 rounded-full transition-all duration-200',
+            isPlaying && 'shadow-lg',
+          )}
           onClick={togglePlayPause}
           disabled={isLoading}
         >
@@ -233,28 +227,43 @@ export function WaveformPlayer({
           )}
         </Button>
 
+        {/* Waveform container */}
         <div className="flex-1 min-w-0">
           <div
             ref={containerRef}
-            className={cn('w-full', isLoading && 'opacity-50')}
+            className={cn(
+              'w-full rounded-lg transition-opacity duration-300',
+              isLoading && 'opacity-30',
+            )}
             style={{ height }}
           />
         </div>
 
-        <span className="text-xs text-muted-foreground tabular-nums shrink-0 w-20 text-right">
-          {formatTime(currentTime)} / {formatTime(duration)}
-        </span>
+        {/* Time display */}
+        <div className="shrink-0 text-right">
+          <span className="text-xs font-medium tabular-nums text-foreground">
+            {formatTime(currentTime)}
+          </span>
+          <span className="text-xs text-muted-foreground tabular-nums">
+            {' / '}
+            {formatTime(duration)}
+          </span>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className={cn('space-y-2', className)}>
-      <div className="flex items-center gap-3">
+    <div className={cn('space-y-3', className)}>
+      <div className="flex items-center gap-4">
+        {/* Large play button for full mode */}
         <Button
-          size="icon"
-          variant="outline"
-          className="h-10 w-10 shrink-0 rounded-full"
+          size="icon-lg"
+          variant={isPlaying ? 'default' : 'outline'}
+          className={cn(
+            'shrink-0 rounded-full transition-all duration-200',
+            isPlaying && 'shadow-lg',
+          )}
           onClick={togglePlayPause}
           disabled={isLoading}
         >
@@ -267,24 +276,33 @@ export function WaveformPlayer({
           )}
         </Button>
 
+        {/* Waveform */}
         <div className="flex-1 min-w-0">
           <div
             ref={containerRef}
-            className={cn('w-full', isLoading && 'opacity-50')}
+            className={cn(
+              'w-full rounded-lg transition-opacity duration-300',
+              isLoading && 'opacity-30',
+            )}
             style={{ height }}
           />
         </div>
       </div>
 
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span className="tabular-nums">{formatTime(currentTime)}</span>
-        <span className="tabular-nums">{formatTime(duration)}</span>
+      {/* Time bar */}
+      <div className="flex items-center justify-between text-xs px-1">
+        <span className="tabular-nums font-medium">
+          {formatTime(currentTime)}
+        </span>
+        <span className="tabular-nums text-muted-foreground">
+          {formatTime(duration)}
+        </span>
       </div>
     </div>
   )
 }
 
-// Export a lazy version for use with IntersectionObserver
+// Lazy version with intersection observer
 export function LazyWaveformPlayer(
   props: WaveformPlayerProps & { threshold?: number },
 ) {
@@ -297,7 +315,6 @@ export function LazyWaveformPlayer(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true)
-          // Once visible, stop observing
           observer.disconnect()
         }
       },
@@ -317,10 +334,12 @@ export function LazyWaveformPlayer(
         <WaveformPlayer {...playerProps} isVisible={isVisible} />
       ) : (
         <div
-          className="flex items-center justify-center bg-muted/30 rounded"
-          style={{ height: playerProps.height || 48 }}
+          className="flex items-center gap-3"
+          style={{ height: (playerProps.height || 48) + 8 }}
         >
-          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+          <div className="h-9 w-9 rounded-full bg-muted animate-pulse" />
+          <div className="flex-1 h-[44px] bg-muted/30 rounded-lg animate-pulse" />
+          <div className="w-20 h-4 bg-muted/50 rounded animate-pulse" />
         </div>
       )}
     </div>

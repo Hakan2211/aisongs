@@ -113,7 +113,7 @@ export function getLastFourChars(str: string, chars = 4): string {
  */
 export function validateApiKeyFormat(
   key: string,
-  provider: 'fal' | 'minimax',
+  provider: 'fal' | 'minimax' | 'replicate',
 ): boolean {
   // Remove any whitespace
   const trimmed = key.trim()
@@ -124,8 +124,12 @@ export function validateApiKeyFormat(
 
   // fal.ai keys are typically UUIDs or similar
   // MiniMax keys have their own format
+  // Replicate keys start with "r8_" typically
   // For now, just check minimum length
-  const minLength = provider === 'fal' ? 10 : 10
+  let minLength = 10
+  if (provider === 'replicate') {
+    minLength = 8 // Replicate tokens are shorter
+  }
 
   return trimmed.length >= minLength
 }

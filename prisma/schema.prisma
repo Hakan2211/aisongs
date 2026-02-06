@@ -65,9 +65,22 @@ model User {
   bunnyPullZone       String?   // Pull Zone hostname (e.g., "my-music")
 
   // ====================================================================================
+  // Replicate API key (for voice conversion)
+  // ====================================================================================
+  replicateApiKey        String?   // Encrypted API key
+  replicateApiKeyLastFour String?  // Last 4 chars for display
+  replicateApiKeyAddedAt DateTime? // When the key was added/updated
+
+  // ====================================================================================
   // Music Generation Relations
   // ====================================================================================
   musicGenerations MusicGeneration[]
+
+  // ====================================================================================
+  // Voice Cloning & Conversion Relations
+  // ====================================================================================
+  voiceClones      VoiceClone[]
+  voiceConversions VoiceConversion[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -200,9 +213,109 @@ model MusicGeneration {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Voice conversions derived from this track
+  voiceConversions VoiceConversion[]
+
   @@index([userId])
   @@index([status])
   @@index([provider])
   @@index([createdAt])
   @@map("music_generation")
+}
+
+// ====================================================================================
+// Voice Clone - Stores user's cloned voices
+// ====================================================================================
+
+model VoiceClone {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Voice identity
+  name        String  // User-given name for the voice
+  description String? // Optional description
+
+  // Provider info
+  provider String // "minimax" | "qwen"
+
+  // MiniMax-specific (returns a voice ID for TTS)
+  minimaxVoiceId String? // custom_voice_id from MiniMax voice clone API
+
+  // Qwen-specific (returns a speaker embedding file)
+  speakerEmbeddingUrl String? // URL to .safetensors file
+  referenceText       String? // Optional reference text for better quality
+
+  // Source audio used for cloning
+  sourceAudioUrl    String  // Original training audio URL
+  sourceAudioStored Boolean @default(false) // Whether stored on CDN
+
+  // Preview audio (optional TTS preview generated during cloning)
+  previewAudioUrl String?
+
+  // Job status
+  status    String  @default("pending") // "pending", "processing", "ready", "failed"
+  error     String? // Error message if failed
+  requestId String? // External provider request ID
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("voice_clone")
+}
+
+// ====================================================================================
+// Voice Conversion - Stores voice conversion jobs
+// ====================================================================================
+
+model VoiceConversion {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Provider info
+  provider String // "amphion-svc" | "rvc-v2"
+
+  // Source audio (from completed music generation)
+  sourceAudioUrl     String           // Audio URL to convert
+  sourceType         String           // "generation" (only completed generations allowed)
+  sourceGenerationId String?          // Link to MusicGeneration
+  sourceGeneration   MusicGeneration? @relation(fields: [sourceGenerationId], references: [id])
+
+  // Target voice settings
+  // For Amphion SVC: preset singer name
+  targetSinger String? // "Adele", "Taylor Swift", etc.
+
+  // For RVC v2: custom model
+  rvcModelUrl  String? // HuggingFace RVC model URL
+  rvcModelName String? // Display name for the model
+
+  // Conversion settings
+  pitchShift   Int?   // Semitones (-12 to 12)
+  indexRate    Float? // RVC index rate (0-1)
+  filterRadius Int?   // RVC filter radius
+
+  // Output
+  outputAudioUrl    String? // Converted audio URL
+  outputAudioStored Boolean @default(false) // Whether stored on CDN
+  audioDurationMs   Int?    // Duration of converted audio
+
+  // Job status
+  status    String  @default("pending") // "pending", "processing", "completed", "failed"
+  error     String? // Error message if failed
+  requestId String? // Replicate prediction ID
+  progress  Int     @default(0) // Progress percentage (0-100)
+
+  // Metadata
+  title String? // User-provided or auto-generated title
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([sourceGenerationId])
+  @@map("voice_conversion")
 }

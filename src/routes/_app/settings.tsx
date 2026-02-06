@@ -25,7 +25,7 @@ import { Label } from '@/components/ui/label'
 
 // Types for API key status
 interface ApiKeyStatus {
-  provider: 'fal' | 'minimax'
+  provider: 'fal' | 'minimax' | 'bunny' | 'replicate'
   hasKey: boolean
   lastFour: string | null
   addedAt: Date | null
@@ -69,6 +69,10 @@ function SettingsPage() {
 
   const falStatus = apiKeyStatuses?.find((s) => s.provider === 'fal')
   const minimaxStatus = apiKeyStatuses?.find((s) => s.provider === 'minimax')
+  const replicateStatus = apiKeyStatuses?.find(
+    (s) => s.provider === 'replicate',
+  )
+
   const isLoading = isLoadingKeys || isLoadingBunny
 
   return (
@@ -129,6 +133,23 @@ function SettingsPage() {
             </div>
           </div>
 
+          {/* Section: Voice Conversion */}
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Voice Conversion</h2>
+            <div className="space-y-4">
+              <ApiKeyCard
+                provider="replicate"
+                title="Replicate API Key"
+                description="For voice conversion using Amphion SVC and RVC v2 models"
+                status={replicateStatus}
+                getKeyLink="https://replicate.com/account/api-tokens"
+                onUpdate={() =>
+                  queryClient.invalidateQueries({ queryKey: ['api-keys'] })
+                }
+              />
+            </div>
+          </div>
+
           {/* Section: Audio Storage */}
           <div>
             <h2 className="text-xl font-semibold mb-4">Audio Storage</h2>
@@ -146,7 +167,7 @@ function SettingsPage() {
 }
 
 interface ApiKeyCardProps {
-  provider: 'fal' | 'minimax'
+  provider: 'fal' | 'minimax' | 'replicate'
   title: string
   description: string
   status?: ApiKeyStatus

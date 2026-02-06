@@ -56,7 +56,9 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   SubscriptionEvent: 'SubscriptionEvent',
-  MusicGeneration: 'MusicGeneration'
+  MusicGeneration: 'MusicGeneration',
+  VoiceClone: 'VoiceClone',
+  VoiceConversion: 'VoiceConversion'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -99,6 +101,9 @@ export const UserScalarFieldEnum = {
   bunnyApiKeyAddedAt: 'bunnyApiKeyAddedAt',
   bunnyStorageZone: 'bunnyStorageZone',
   bunnyPullZone: 'bunnyPullZone',
+  replicateApiKey: 'replicateApiKey',
+  replicateApiKeyLastFour: 'replicateApiKeyLastFour',
+  replicateApiKeyAddedAt: 'replicateApiKeyAddedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -193,6 +198,56 @@ export const MusicGenerationScalarFieldEnum = {
 } as const
 
 export type MusicGenerationScalarFieldEnum = (typeof MusicGenerationScalarFieldEnum)[keyof typeof MusicGenerationScalarFieldEnum]
+
+
+export const VoiceCloneScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  description: 'description',
+  provider: 'provider',
+  minimaxVoiceId: 'minimaxVoiceId',
+  speakerEmbeddingUrl: 'speakerEmbeddingUrl',
+  referenceText: 'referenceText',
+  sourceAudioUrl: 'sourceAudioUrl',
+  sourceAudioStored: 'sourceAudioStored',
+  previewAudioUrl: 'previewAudioUrl',
+  status: 'status',
+  error: 'error',
+  requestId: 'requestId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VoiceCloneScalarFieldEnum = (typeof VoiceCloneScalarFieldEnum)[keyof typeof VoiceCloneScalarFieldEnum]
+
+
+export const VoiceConversionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  sourceAudioUrl: 'sourceAudioUrl',
+  sourceType: 'sourceType',
+  sourceGenerationId: 'sourceGenerationId',
+  targetSinger: 'targetSinger',
+  rvcModelUrl: 'rvcModelUrl',
+  rvcModelName: 'rvcModelName',
+  pitchShift: 'pitchShift',
+  indexRate: 'indexRate',
+  filterRadius: 'filterRadius',
+  outputAudioUrl: 'outputAudioUrl',
+  outputAudioStored: 'outputAudioStored',
+  audioDurationMs: 'audioDurationMs',
+  status: 'status',
+  error: 'error',
+  requestId: 'requestId',
+  progress: 'progress',
+  title: 'title',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VoiceConversionScalarFieldEnum = (typeof VoiceConversionScalarFieldEnum)[keyof typeof VoiceConversionScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -69,3 +69,13 @@ export type SubscriptionEvent = Prisma.SubscriptionEventModel
  * 
  */
 export type MusicGeneration = Prisma.MusicGenerationModel
+/**
+ * Model VoiceClone
+ * 
+ */
+export type VoiceClone = Prisma.VoiceCloneModel
+/**
+ * Model VoiceConversion
+ * 
+ */
+export type VoiceConversion = Prisma.VoiceConversionModel

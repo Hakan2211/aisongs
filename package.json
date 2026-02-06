@@ -62,11 +62,13 @@
     "react-day-picker": "^9.13.0",
     "react-dom": "^19.2.0",
     "recharts": "^2.15.4",
+    "replicate": "^1.4.0",
     "sonner": "^2.0.7",
     "stripe": "^20.1.0",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.6",
     "tw-animate-css": "^1.3.6",
+    "vaul": "^1.1.2",
     "vite-tsconfig-paths": "^6.0.2",
     "wavesurfer.js": "^7.12.1",
     "zod": "^4.1.11"

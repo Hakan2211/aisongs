@@ -1,5 +1,12 @@
 import { motion } from 'framer-motion'
-import { Download, Infinity, Key, Lock, Mic2, Music } from 'lucide-react'
+import {
+  Download,
+  Infinity as InfinityIcon,
+  Key,
+  Lock,
+  Mic2,
+  Music,
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const features = [
@@ -44,7 +51,7 @@ const features = [
     bgColor: 'bg-pink-500/10',
   },
   {
-    icon: Infinity,
+    icon: InfinityIcon,
     title: 'Unlimited Generations',
     description:
       'No generation limits from us. Only pay for what you use directly to AI providers.',

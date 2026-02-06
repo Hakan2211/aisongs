@@ -377,6 +377,7 @@ export type MusicGenerationWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"MusicGeneration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MusicGeneration"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  voiceConversions?: Prisma.VoiceConversionListRelationFilter
 }
 
 export type MusicGenerationOrderByWithRelationInput = {
@@ -405,6 +406,7 @@ export type MusicGenerationOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  voiceConversions?: Prisma.VoiceConversionOrderByRelationAggregateInput
 }
 
 export type MusicGenerationWhereUniqueInput = Prisma.AtLeast<{
@@ -436,6 +438,7 @@ export type MusicGenerationWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"MusicGeneration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MusicGeneration"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  voiceConversions?: Prisma.VoiceConversionListRelationFilter
 }, "id">
 
 export type MusicGenerationOrderByWithAggregationInput = {
@@ -525,6 +528,7 @@ export type MusicGenerationCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutMusicGenerationsInput
+  voiceConversions?: Prisma.VoiceConversionCreateNestedManyWithoutSourceGenerationInput
 }
 
 export type MusicGenerationUncheckedCreateInput = {
@@ -552,6 +556,7 @@ export type MusicGenerationUncheckedCreateInput = {
   isFavorite?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  voiceConversions?: Prisma.VoiceConversionUncheckedCreateNestedManyWithoutSourceGenerationInput
 }
 
 export type MusicGenerationUpdateInput = {
@@ -579,6 +584,7 @@ export type MusicGenerationUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutMusicGenerationsNestedInput
+  voiceConversions?: Prisma.VoiceConversionUpdateManyWithoutSourceGenerationNestedInput
 }
 
 export type MusicGenerationUncheckedUpdateInput = {
@@ -606,6 +612,7 @@ export type MusicGenerationUncheckedUpdateInput = {
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voiceConversions?: Prisma.VoiceConversionUncheckedUpdateManyWithoutSourceGenerationNestedInput
 }
 
 export type MusicGenerationCreateManyInput = {
@@ -791,6 +798,11 @@ export type MusicGenerationSumOrderByAggregateInput = {
   progress?: Prisma.SortOrder
 }
 
+export type MusicGenerationNullableScalarRelationFilter = {
+  is?: Prisma.MusicGenerationWhereInput | null
+  isNot?: Prisma.MusicGenerationWhereInput | null
+}
+
 export type MusicGenerationCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.MusicGenerationCreateWithoutUserInput, Prisma.MusicGenerationUncheckedCreateWithoutUserInput> | Prisma.MusicGenerationCreateWithoutUserInput[] | Prisma.MusicGenerationUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.MusicGenerationCreateOrConnectWithoutUserInput | Prisma.MusicGenerationCreateOrConnectWithoutUserInput[]
@@ -849,6 +861,22 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type MusicGenerationCreateNestedOneWithoutVoiceConversionsInput = {
+  create?: Prisma.XOR<Prisma.MusicGenerationCreateWithoutVoiceConversionsInput, Prisma.MusicGenerationUncheckedCreateWithoutVoiceConversionsInput>
+  connectOrCreate?: Prisma.MusicGenerationCreateOrConnectWithoutVoiceConversionsInput
+  connect?: Prisma.MusicGenerationWhereUniqueInput
+}
+
+export type MusicGenerationUpdateOneWithoutVoiceConversionsNestedInput = {
+  create?: Prisma.XOR<Prisma.MusicGenerationCreateWithoutVoiceConversionsInput, Prisma.MusicGenerationUncheckedCreateWithoutVoiceConversionsInput>
+  connectOrCreate?: Prisma.MusicGenerationCreateOrConnectWithoutVoiceConversionsInput
+  upsert?: Prisma.MusicGenerationUpsertWithoutVoiceConversionsInput
+  disconnect?: Prisma.MusicGenerationWhereInput | boolean
+  delete?: Prisma.MusicGenerationWhereInput | boolean
+  connect?: Prisma.MusicGenerationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MusicGenerationUpdateToOneWithWhereWithoutVoiceConversionsInput, Prisma.MusicGenerationUpdateWithoutVoiceConversionsInput>, Prisma.MusicGenerationUncheckedUpdateWithoutVoiceConversionsInput>
+}
+
 export type MusicGenerationCreateWithoutUserInput = {
   id?: string
   provider: string
@@ -873,6 +901,7 @@ export type MusicGenerationCreateWithoutUserInput = {
   isFavorite?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  voiceConversions?: Prisma.VoiceConversionCreateNestedManyWithoutSourceGenerationInput
 }
 
 export type MusicGenerationUncheckedCreateWithoutUserInput = {
@@ -899,6 +928,7 @@ export type MusicGenerationUncheckedCreateWithoutUserInput = {
   isFavorite?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  voiceConversions?: Prisma.VoiceConversionUncheckedCreateNestedManyWithoutSourceGenerationInput
 }
 
 export type MusicGenerationCreateOrConnectWithoutUserInput = {
@@ -956,6 +986,130 @@ export type MusicGenerationScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"MusicGeneration"> | Date | string
 }
 
+export type MusicGenerationCreateWithoutVoiceConversionsInput = {
+  id?: string
+  provider: string
+  model?: string | null
+  prompt: string
+  lyrics?: string | null
+  durationMs?: number | null
+  outputFormat?: string | null
+  settings?: string | null
+  audioUrl?: string | null
+  originalAudioUrl?: string | null
+  audioStored?: boolean
+  audioDurationMs?: number | null
+  status?: string
+  error?: string | null
+  requestId?: string | null
+  statusUrl?: string | null
+  responseUrl?: string | null
+  cancelUrl?: string | null
+  progress?: number
+  title?: string | null
+  isFavorite?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutMusicGenerationsInput
+}
+
+export type MusicGenerationUncheckedCreateWithoutVoiceConversionsInput = {
+  id?: string
+  userId: string
+  provider: string
+  model?: string | null
+  prompt: string
+  lyrics?: string | null
+  durationMs?: number | null
+  outputFormat?: string | null
+  settings?: string | null
+  audioUrl?: string | null
+  originalAudioUrl?: string | null
+  audioStored?: boolean
+  audioDurationMs?: number | null
+  status?: string
+  error?: string | null
+  requestId?: string | null
+  statusUrl?: string | null
+  responseUrl?: string | null
+  cancelUrl?: string | null
+  progress?: number
+  title?: string | null
+  isFavorite?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type MusicGenerationCreateOrConnectWithoutVoiceConversionsInput = {
+  where: Prisma.MusicGenerationWhereUniqueInput
+  create: Prisma.XOR<Prisma.MusicGenerationCreateWithoutVoiceConversionsInput, Prisma.MusicGenerationUncheckedCreateWithoutVoiceConversionsInput>
+}
+
+export type MusicGenerationUpsertWithoutVoiceConversionsInput = {
+  update: Prisma.XOR<Prisma.MusicGenerationUpdateWithoutVoiceConversionsInput, Prisma.MusicGenerationUncheckedUpdateWithoutVoiceConversionsInput>
+  create: Prisma.XOR<Prisma.MusicGenerationCreateWithoutVoiceConversionsInput, Prisma.MusicGenerationUncheckedCreateWithoutVoiceConversionsInput>
+  where?: Prisma.MusicGenerationWhereInput
+}
+
+export type MusicGenerationUpdateToOneWithWhereWithoutVoiceConversionsInput = {
+  where?: Prisma.MusicGenerationWhereInput
+  data: Prisma.XOR<Prisma.MusicGenerationUpdateWithoutVoiceConversionsInput, Prisma.MusicGenerationUncheckedUpdateWithoutVoiceConversionsInput>
+}
+
+export type MusicGenerationUpdateWithoutVoiceConversionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  lyrics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  originalAudioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioStored?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  audioDurationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statusUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  responseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  progress?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutMusicGenerationsNestedInput
+}
+
+export type MusicGenerationUncheckedUpdateWithoutVoiceConversionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  lyrics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  originalAudioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioStored?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  audioDurationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statusUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  responseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  progress?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type MusicGenerationCreateManyUserInput = {
   id?: string
   provider: string
@@ -1006,6 +1160,7 @@ export type MusicGenerationUpdateWithoutUserInput = {
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voiceConversions?: Prisma.VoiceConversionUpdateManyWithoutSourceGenerationNestedInput
 }
 
 export type MusicGenerationUncheckedUpdateWithoutUserInput = {
@@ -1032,6 +1187,7 @@ export type MusicGenerationUncheckedUpdateWithoutUserInput = {
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voiceConversions?: Prisma.VoiceConversionUncheckedUpdateManyWithoutSourceGenerationNestedInput
 }
 
 export type MusicGenerationUncheckedUpdateManyWithoutUserInput = {
@@ -1061,6 +1217,35 @@ export type MusicGenerationUncheckedUpdateManyWithoutUserInput = {
 }
 
 
+/**
+ * Count Type MusicGenerationCountOutputType
+ */
+
+export type MusicGenerationCountOutputType = {
+  voiceConversions: number
+}
+
+export type MusicGenerationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  voiceConversions?: boolean | MusicGenerationCountOutputTypeCountVoiceConversionsArgs
+}
+
+/**
+ * MusicGenerationCountOutputType without action
+ */
+export type MusicGenerationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MusicGenerationCountOutputType
+   */
+  select?: Prisma.MusicGenerationCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * MusicGenerationCountOutputType without action
+ */
+export type MusicGenerationCountOutputTypeCountVoiceConversionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VoiceConversionWhereInput
+}
+
 
 export type MusicGenerationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1088,6 +1273,8 @@ export type MusicGenerationSelect<ExtArgs extends runtime.Types.Extensions.Inter
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  voiceConversions?: boolean | Prisma.MusicGeneration$voiceConversionsArgs<ExtArgs>
+  _count?: boolean | Prisma.MusicGenerationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["musicGeneration"]>
 
 export type MusicGenerationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1176,6 +1363,8 @@ export type MusicGenerationSelectScalar = {
 export type MusicGenerationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "provider" | "model" | "prompt" | "lyrics" | "durationMs" | "outputFormat" | "settings" | "audioUrl" | "originalAudioUrl" | "audioStored" | "audioDurationMs" | "status" | "error" | "requestId" | "statusUrl" | "responseUrl" | "cancelUrl" | "progress" | "title" | "isFavorite" | "createdAt" | "updatedAt", ExtArgs["result"]["musicGeneration"]>
 export type MusicGenerationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  voiceConversions?: boolean | Prisma.MusicGeneration$voiceConversionsArgs<ExtArgs>
+  _count?: boolean | Prisma.MusicGenerationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MusicGenerationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1188,6 +1377,7 @@ export type $MusicGenerationPayload<ExtArgs extends runtime.Types.Extensions.Int
   name: "MusicGeneration"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    voiceConversions: Prisma.$VoiceConversionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1609,6 +1799,7 @@ readonly fields: MusicGenerationFieldRefs;
 export interface Prisma__MusicGenerationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  voiceConversions<T extends Prisma.MusicGeneration$voiceConversionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MusicGeneration$voiceConversionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VoiceConversionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2053,6 +2244,30 @@ export type MusicGenerationDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many MusicGenerations to delete.
    */
   limit?: number
+}
+
+/**
+ * MusicGeneration.voiceConversions
+ */
+export type MusicGeneration$voiceConversionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VoiceConversion
+   */
+  select?: Prisma.VoiceConversionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VoiceConversion
+   */
+  omit?: Prisma.VoiceConversionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VoiceConversionInclude<ExtArgs> | null
+  where?: Prisma.VoiceConversionWhereInput
+  orderBy?: Prisma.VoiceConversionOrderByWithRelationInput | Prisma.VoiceConversionOrderByWithRelationInput[]
+  cursor?: Prisma.VoiceConversionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VoiceConversionScalarFieldEnum | Prisma.VoiceConversionScalarFieldEnum[]
 }
 
 /**

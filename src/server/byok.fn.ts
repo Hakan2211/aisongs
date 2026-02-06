@@ -20,7 +20,7 @@ import { prisma } from '@/db'
 // Types
 // ============================================================================
 
-export type ApiKeyProvider = 'fal' | 'minimax' | 'bunny'
+export type ApiKeyProvider = 'fal' | 'minimax' | 'bunny' | 'replicate'
 
 export interface ApiKeyStatus {
   provider: ApiKeyProvider
@@ -42,16 +42,16 @@ export interface BunnyStatus {
 // ============================================================================
 
 const saveApiKeySchema = z.object({
-  provider: z.enum(['fal', 'minimax']),
+  provider: z.enum(['fal', 'minimax', 'replicate']),
   apiKey: z.string().min(1, 'API key is required'),
 })
 
 const deleteApiKeySchema = z.object({
-  provider: z.enum(['fal', 'minimax']),
+  provider: z.enum(['fal', 'minimax', 'replicate']),
 })
 
 const getDecryptedKeySchema = z.object({
-  provider: z.enum(['fal', 'minimax']),
+  provider: z.enum(['fal', 'minimax', 'replicate']),
 })
 
 const saveBunnySettingsSchema = z.object({
@@ -79,6 +79,9 @@ export const getAllApiKeyStatusesFn = createServerFn({ method: 'GET' })
         minimaxApiKey: true,
         minimaxApiKeyLastFour: true,
         minimaxApiKeyAddedAt: true,
+        replicateApiKey: true,
+        replicateApiKeyLastFour: true,
+        replicateApiKeyAddedAt: true,
       },
     })
 
@@ -98,6 +101,12 @@ export const getAllApiKeyStatusesFn = createServerFn({ method: 'GET' })
         hasKey: !!user.minimaxApiKey,
         lastFour: user.minimaxApiKeyLastFour,
         addedAt: user.minimaxApiKeyAddedAt,
+      },
+      {
+        provider: 'replicate' as const,
+        hasKey: !!user.replicateApiKey,
+        lastFour: user.replicateApiKeyLastFour,
+        addedAt: user.replicateApiKeyAddedAt,
       },
     ]
   })
@@ -153,24 +162,37 @@ export const saveApiKeyFn = createServerFn({ method: 'POST' })
     const now = new Date()
 
     // Update the appropriate fields based on provider
-    if (provider === 'fal') {
-      await prisma.user.update({
-        where: { id: context.user.id },
-        data: {
-          falApiKey: encryptedKey,
-          falApiKeyLastFour: lastFour,
-          falApiKeyAddedAt: now,
-        },
-      })
-    } else if (provider === 'minimax') {
-      await prisma.user.update({
-        where: { id: context.user.id },
-        data: {
-          minimaxApiKey: encryptedKey,
-          minimaxApiKeyLastFour: lastFour,
-          minimaxApiKeyAddedAt: now,
-        },
-      })
+    switch (provider) {
+      case 'fal':
+        await prisma.user.update({
+          where: { id: context.user.id },
+          data: {
+            falApiKey: encryptedKey,
+            falApiKeyLastFour: lastFour,
+            falApiKeyAddedAt: now,
+          },
+        })
+        break
+      case 'minimax':
+        await prisma.user.update({
+          where: { id: context.user.id },
+          data: {
+            minimaxApiKey: encryptedKey,
+            minimaxApiKeyLastFour: lastFour,
+            minimaxApiKeyAddedAt: now,
+          },
+        })
+        break
+      case 'replicate':
+        await prisma.user.update({
+          where: { id: context.user.id },
+          data: {
+            replicateApiKey: encryptedKey,
+            replicateApiKeyLastFour: lastFour,
+            replicateApiKeyAddedAt: now,
+          },
+        })
+        break
     }
 
     return {
@@ -191,24 +213,37 @@ export const deleteApiKeyFn = createServerFn({ method: 'POST' })
     const { provider } = data
 
     // Clear the appropriate fields based on provider
-    if (provider === 'fal') {
-      await prisma.user.update({
-        where: { id: context.user.id },
-        data: {
-          falApiKey: null,
-          falApiKeyLastFour: null,
-          falApiKeyAddedAt: null,
-        },
-      })
-    } else if (provider === 'minimax') {
-      await prisma.user.update({
-        where: { id: context.user.id },
-        data: {
-          minimaxApiKey: null,
-          minimaxApiKeyLastFour: null,
-          minimaxApiKeyAddedAt: null,
-        },
-      })
+    switch (provider) {
+      case 'fal':
+        await prisma.user.update({
+          where: { id: context.user.id },
+          data: {
+            falApiKey: null,
+            falApiKeyLastFour: null,
+            falApiKeyAddedAt: null,
+          },
+        })
+        break
+      case 'minimax':
+        await prisma.user.update({
+          where: { id: context.user.id },
+          data: {
+            minimaxApiKey: null,
+            minimaxApiKeyLastFour: null,
+            minimaxApiKeyAddedAt: null,
+          },
+        })
+        break
+      case 'replicate':
+        await prisma.user.update({
+          where: { id: context.user.id },
+          data: {
+            replicateApiKey: null,
+            replicateApiKeyLastFour: null,
+            replicateApiKeyAddedAt: null,
+          },
+        })
+        break
     }
 
     return {
@@ -232,6 +267,7 @@ export const getDecryptedApiKeyFn = createServerFn({ method: 'GET' })
       select: {
         falApiKey: true,
         minimaxApiKey: true,
+        replicateApiKey: true,
       },
     })
 
@@ -241,10 +277,16 @@ export const getDecryptedApiKeyFn = createServerFn({ method: 'GET' })
 
     let encryptedKey: string | null = null
 
-    if (provider === 'fal') {
-      encryptedKey = user.falApiKey
-    } else if (provider === 'minimax') {
-      encryptedKey = user.minimaxApiKey
+    switch (provider) {
+      case 'fal':
+        encryptedKey = user.falApiKey
+        break
+      case 'minimax':
+        encryptedKey = user.minimaxApiKey
+        break
+      case 'replicate':
+        encryptedKey = user.replicateApiKey
+        break
     }
 
     if (!encryptedKey) {

@@ -389,7 +389,9 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   SubscriptionEvent: 'SubscriptionEvent',
-  MusicGeneration: 'MusicGeneration'
+  MusicGeneration: 'MusicGeneration',
+  VoiceClone: 'VoiceClone',
+  VoiceConversion: 'VoiceConversion'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "subscriptionEvent" | "musicGeneration"
+    modelProps: "user" | "session" | "account" | "verification" | "subscriptionEvent" | "musicGeneration" | "voiceClone" | "voiceConversion"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +855,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    VoiceClone: {
+      payload: Prisma.$VoiceClonePayload<ExtArgs>
+      fields: Prisma.VoiceCloneFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VoiceCloneFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceClonePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VoiceCloneFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceClonePayload>
+        }
+        findFirst: {
+          args: Prisma.VoiceCloneFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceClonePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VoiceCloneFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceClonePayload>
+        }
+        findMany: {
+          args: Prisma.VoiceCloneFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceClonePayload>[]
+        }
+        create: {
+          args: Prisma.VoiceCloneCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceClonePayload>
+        }
+        createMany: {
+          args: Prisma.VoiceCloneCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VoiceCloneCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceClonePayload>[]
+        }
+        delete: {
+          args: Prisma.VoiceCloneDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceClonePayload>
+        }
+        update: {
+          args: Prisma.VoiceCloneUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceClonePayload>
+        }
+        deleteMany: {
+          args: Prisma.VoiceCloneDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VoiceCloneUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VoiceCloneUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceClonePayload>[]
+        }
+        upsert: {
+          args: Prisma.VoiceCloneUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceClonePayload>
+        }
+        aggregate: {
+          args: Prisma.VoiceCloneAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVoiceClone>
+        }
+        groupBy: {
+          args: Prisma.VoiceCloneGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VoiceCloneGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VoiceCloneCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VoiceCloneCountAggregateOutputType> | number
+        }
+      }
+    }
+    VoiceConversion: {
+      payload: Prisma.$VoiceConversionPayload<ExtArgs>
+      fields: Prisma.VoiceConversionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VoiceConversionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceConversionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VoiceConversionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceConversionPayload>
+        }
+        findFirst: {
+          args: Prisma.VoiceConversionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceConversionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VoiceConversionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceConversionPayload>
+        }
+        findMany: {
+          args: Prisma.VoiceConversionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceConversionPayload>[]
+        }
+        create: {
+          args: Prisma.VoiceConversionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceConversionPayload>
+        }
+        createMany: {
+          args: Prisma.VoiceConversionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VoiceConversionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceConversionPayload>[]
+        }
+        delete: {
+          args: Prisma.VoiceConversionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceConversionPayload>
+        }
+        update: {
+          args: Prisma.VoiceConversionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceConversionPayload>
+        }
+        deleteMany: {
+          args: Prisma.VoiceConversionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VoiceConversionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VoiceConversionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceConversionPayload>[]
+        }
+        upsert: {
+          args: Prisma.VoiceConversionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceConversionPayload>
+        }
+        aggregate: {
+          args: Prisma.VoiceConversionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVoiceConversion>
+        }
+        groupBy: {
+          args: Prisma.VoiceConversionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VoiceConversionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VoiceConversionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VoiceConversionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -916,6 +1066,9 @@ export const UserScalarFieldEnum = {
   bunnyApiKeyAddedAt: 'bunnyApiKeyAddedAt',
   bunnyStorageZone: 'bunnyStorageZone',
   bunnyPullZone: 'bunnyPullZone',
+  replicateApiKey: 'replicateApiKey',
+  replicateApiKeyLastFour: 'replicateApiKeyLastFour',
+  replicateApiKeyAddedAt: 'replicateApiKeyAddedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1010,6 +1163,56 @@ export const MusicGenerationScalarFieldEnum = {
 } as const
 
 export type MusicGenerationScalarFieldEnum = (typeof MusicGenerationScalarFieldEnum)[keyof typeof MusicGenerationScalarFieldEnum]
+
+
+export const VoiceCloneScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  description: 'description',
+  provider: 'provider',
+  minimaxVoiceId: 'minimaxVoiceId',
+  speakerEmbeddingUrl: 'speakerEmbeddingUrl',
+  referenceText: 'referenceText',
+  sourceAudioUrl: 'sourceAudioUrl',
+  sourceAudioStored: 'sourceAudioStored',
+  previewAudioUrl: 'previewAudioUrl',
+  status: 'status',
+  error: 'error',
+  requestId: 'requestId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VoiceCloneScalarFieldEnum = (typeof VoiceCloneScalarFieldEnum)[keyof typeof VoiceCloneScalarFieldEnum]
+
+
+export const VoiceConversionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  sourceAudioUrl: 'sourceAudioUrl',
+  sourceType: 'sourceType',
+  sourceGenerationId: 'sourceGenerationId',
+  targetSinger: 'targetSinger',
+  rvcModelUrl: 'rvcModelUrl',
+  rvcModelName: 'rvcModelName',
+  pitchShift: 'pitchShift',
+  indexRate: 'indexRate',
+  filterRadius: 'filterRadius',
+  outputAudioUrl: 'outputAudioUrl',
+  outputAudioStored: 'outputAudioStored',
+  audioDurationMs: 'audioDurationMs',
+  status: 'status',
+  error: 'error',
+  requestId: 'requestId',
+  progress: 'progress',
+  title: 'title',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VoiceConversionScalarFieldEnum = (typeof VoiceConversionScalarFieldEnum)[keyof typeof VoiceConversionScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1169,6 +1372,8 @@ export type GlobalOmitConfig = {
   verification?: Prisma.VerificationOmit
   subscriptionEvent?: Prisma.SubscriptionEventOmit
   musicGeneration?: Prisma.MusicGenerationOmit
+  voiceClone?: Prisma.VoiceCloneOmit
+  voiceConversion?: Prisma.VoiceConversionOmit
 }
 
 /* Types for Logging */

@@ -15,6 +15,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AppVoiceRouteImport } from './routes/_app/voice'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppMusicRouteImport } from './routes/_app/music'
@@ -49,6 +50,11 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRoute,
 } as any)
+const AppVoiceRoute = AppVoiceRouteImport.update({
+  id: '/voice',
+  path: '/voice',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/music': typeof AppMusicRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
+  '/voice': typeof AppVoiceRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/music': typeof AppMusicRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
+  '/voice': typeof AppVoiceRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/_app/music': typeof AppMusicRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/settings': typeof AppSettingsRoute
+  '/_app/voice': typeof AppVoiceRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/music'
     | '/profile'
     | '/settings'
+    | '/voice'
     | '/login'
     | '/signup'
     | '/api/auth/$'
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/music'
     | '/profile'
     | '/settings'
+    | '/voice'
     | '/login'
     | '/signup'
     | '/api/auth/$'
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/_app/music'
     | '/_app/profile'
     | '/_app/settings'
+    | '/_app/voice'
     | '/_auth/login'
     | '/_auth/signup'
     | '/api/auth/$'
@@ -201,6 +213,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_app/voice': {
+      id: '/_app/voice'
+      path: '/voice'
+      fullPath: '/voice'
+      preLoaderRoute: typeof AppVoiceRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/settings': {
       id: '/_app/settings'
       path: '/settings'
@@ -244,6 +263,7 @@ interface AppRouteChildren {
   AppMusicRoute: typeof AppMusicRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppVoiceRoute: typeof AppVoiceRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -251,6 +271,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMusicRoute: AppMusicRoute,
   AppProfileRoute: AppProfileRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppVoiceRoute: AppVoiceRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

@@ -51,6 +51,9 @@ export type UserMinAggregateOutputType = {
   bunnyApiKeyAddedAt: Date | null
   bunnyStorageZone: string | null
   bunnyPullZone: string | null
+  replicateApiKey: string | null
+  replicateApiKeyLastFour: string | null
+  replicateApiKeyAddedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -82,6 +85,9 @@ export type UserMaxAggregateOutputType = {
   bunnyApiKeyAddedAt: Date | null
   bunnyStorageZone: string | null
   bunnyPullZone: string | null
+  replicateApiKey: string | null
+  replicateApiKeyLastFour: string | null
+  replicateApiKeyAddedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -113,6 +119,9 @@ export type UserCountAggregateOutputType = {
   bunnyApiKeyAddedAt: number
   bunnyStorageZone: number
   bunnyPullZone: number
+  replicateApiKey: number
+  replicateApiKeyLastFour: number
+  replicateApiKeyAddedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -146,6 +155,9 @@ export type UserMinAggregateInputType = {
   bunnyApiKeyAddedAt?: true
   bunnyStorageZone?: true
   bunnyPullZone?: true
+  replicateApiKey?: true
+  replicateApiKeyLastFour?: true
+  replicateApiKeyAddedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -177,6 +189,9 @@ export type UserMaxAggregateInputType = {
   bunnyApiKeyAddedAt?: true
   bunnyStorageZone?: true
   bunnyPullZone?: true
+  replicateApiKey?: true
+  replicateApiKeyLastFour?: true
+  replicateApiKeyAddedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -208,6 +223,9 @@ export type UserCountAggregateInputType = {
   bunnyApiKeyAddedAt?: true
   bunnyStorageZone?: true
   bunnyPullZone?: true
+  replicateApiKey?: true
+  replicateApiKeyLastFour?: true
+  replicateApiKeyAddedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -312,6 +330,9 @@ export type UserGroupByOutputType = {
   bunnyApiKeyAddedAt: Date | null
   bunnyStorageZone: string | null
   bunnyPullZone: string | null
+  replicateApiKey: string | null
+  replicateApiKeyLastFour: string | null
+  replicateApiKeyAddedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -364,12 +385,17 @@ export type UserWhereInput = {
   bunnyApiKeyAddedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   bunnyStorageZone?: Prisma.StringNullableFilter<"User"> | string | null
   bunnyPullZone?: Prisma.StringNullableFilter<"User"> | string | null
+  replicateApiKey?: Prisma.StringNullableFilter<"User"> | string | null
+  replicateApiKeyLastFour?: Prisma.StringNullableFilter<"User"> | string | null
+  replicateApiKeyAddedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   subscriptionEvents?: Prisma.SubscriptionEventListRelationFilter
   musicGenerations?: Prisma.MusicGenerationListRelationFilter
+  voiceClones?: Prisma.VoiceCloneListRelationFilter
+  voiceConversions?: Prisma.VoiceConversionListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -399,12 +425,17 @@ export type UserOrderByWithRelationInput = {
   bunnyApiKeyAddedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   bunnyStorageZone?: Prisma.SortOrderInput | Prisma.SortOrder
   bunnyPullZone?: Prisma.SortOrderInput | Prisma.SortOrder
+  replicateApiKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  replicateApiKeyLastFour?: Prisma.SortOrderInput | Prisma.SortOrder
+  replicateApiKeyAddedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   subscriptionEvents?: Prisma.SubscriptionEventOrderByRelationAggregateInput
   musicGenerations?: Prisma.MusicGenerationOrderByRelationAggregateInput
+  voiceClones?: Prisma.VoiceCloneOrderByRelationAggregateInput
+  voiceConversions?: Prisma.VoiceConversionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -437,12 +468,17 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   bunnyApiKeyAddedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   bunnyStorageZone?: Prisma.StringNullableFilter<"User"> | string | null
   bunnyPullZone?: Prisma.StringNullableFilter<"User"> | string | null
+  replicateApiKey?: Prisma.StringNullableFilter<"User"> | string | null
+  replicateApiKeyLastFour?: Prisma.StringNullableFilter<"User"> | string | null
+  replicateApiKeyAddedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   subscriptionEvents?: Prisma.SubscriptionEventListRelationFilter
   musicGenerations?: Prisma.MusicGenerationListRelationFilter
+  voiceClones?: Prisma.VoiceCloneListRelationFilter
+  voiceConversions?: Prisma.VoiceConversionListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -472,6 +508,9 @@ export type UserOrderByWithAggregationInput = {
   bunnyApiKeyAddedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   bunnyStorageZone?: Prisma.SortOrderInput | Prisma.SortOrder
   bunnyPullZone?: Prisma.SortOrderInput | Prisma.SortOrder
+  replicateApiKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  replicateApiKeyLastFour?: Prisma.SortOrderInput | Prisma.SortOrder
+  replicateApiKeyAddedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -509,6 +548,9 @@ export type UserScalarWhereWithAggregatesInput = {
   bunnyApiKeyAddedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   bunnyStorageZone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   bunnyPullZone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  replicateApiKey?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  replicateApiKeyLastFour?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  replicateApiKeyAddedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -540,12 +582,17 @@ export type UserCreateInput = {
   bunnyApiKeyAddedAt?: Date | string | null
   bunnyStorageZone?: string | null
   bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutUserInput
   musicGenerations?: Prisma.MusicGenerationCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -575,12 +622,17 @@ export type UserUncheckedCreateInput = {
   bunnyApiKeyAddedAt?: Date | string | null
   bunnyStorageZone?: string | null
   bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutUserInput
   musicGenerations?: Prisma.MusicGenerationUncheckedCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneUncheckedCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -610,12 +662,17 @@ export type UserUpdateInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutUserNestedInput
   musicGenerations?: Prisma.MusicGenerationUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -645,12 +702,17 @@ export type UserUncheckedUpdateInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutUserNestedInput
   musicGenerations?: Prisma.MusicGenerationUncheckedUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUncheckedUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -680,6 +742,9 @@ export type UserCreateManyInput = {
   bunnyApiKeyAddedAt?: Date | string | null
   bunnyStorageZone?: string | null
   bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -711,6 +776,9 @@ export type UserUpdateManyMutationInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -742,6 +810,9 @@ export type UserUncheckedUpdateManyInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -773,6 +844,9 @@ export type UserCountOrderByAggregateInput = {
   bunnyApiKeyAddedAt?: Prisma.SortOrder
   bunnyStorageZone?: Prisma.SortOrder
   bunnyPullZone?: Prisma.SortOrder
+  replicateApiKey?: Prisma.SortOrder
+  replicateApiKeyLastFour?: Prisma.SortOrder
+  replicateApiKeyAddedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -804,6 +878,9 @@ export type UserMaxOrderByAggregateInput = {
   bunnyApiKeyAddedAt?: Prisma.SortOrder
   bunnyStorageZone?: Prisma.SortOrder
   bunnyPullZone?: Prisma.SortOrder
+  replicateApiKey?: Prisma.SortOrder
+  replicateApiKeyLastFour?: Prisma.SortOrder
+  replicateApiKeyAddedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -835,6 +912,9 @@ export type UserMinOrderByAggregateInput = {
   bunnyApiKeyAddedAt?: Prisma.SortOrder
   bunnyStorageZone?: Prisma.SortOrder
   bunnyPullZone?: Prisma.SortOrder
+  replicateApiKey?: Prisma.SortOrder
+  replicateApiKeyLastFour?: Prisma.SortOrder
+  replicateApiKeyAddedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -920,6 +1000,34 @@ export type UserUpdateOneRequiredWithoutMusicGenerationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMusicGenerationsInput, Prisma.UserUpdateWithoutMusicGenerationsInput>, Prisma.UserUncheckedUpdateWithoutMusicGenerationsInput>
 }
 
+export type UserCreateNestedOneWithoutVoiceClonesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVoiceClonesInput, Prisma.UserUncheckedCreateWithoutVoiceClonesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVoiceClonesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutVoiceClonesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVoiceClonesInput, Prisma.UserUncheckedCreateWithoutVoiceClonesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVoiceClonesInput
+  upsert?: Prisma.UserUpsertWithoutVoiceClonesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVoiceClonesInput, Prisma.UserUpdateWithoutVoiceClonesInput>, Prisma.UserUncheckedUpdateWithoutVoiceClonesInput>
+}
+
+export type UserCreateNestedOneWithoutVoiceConversionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVoiceConversionsInput, Prisma.UserUncheckedCreateWithoutVoiceConversionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVoiceConversionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutVoiceConversionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVoiceConversionsInput, Prisma.UserUncheckedCreateWithoutVoiceConversionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVoiceConversionsInput
+  upsert?: Prisma.UserUpsertWithoutVoiceConversionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVoiceConversionsInput, Prisma.UserUpdateWithoutVoiceConversionsInput>, Prisma.UserUncheckedUpdateWithoutVoiceConversionsInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id?: string
   email: string
@@ -947,11 +1055,16 @@ export type UserCreateWithoutSessionsInput = {
   bunnyApiKeyAddedAt?: Date | string | null
   bunnyStorageZone?: string | null
   bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutUserInput
   musicGenerations?: Prisma.MusicGenerationCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -981,11 +1094,16 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   bunnyApiKeyAddedAt?: Date | string | null
   bunnyStorageZone?: string | null
   bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutUserInput
   musicGenerations?: Prisma.MusicGenerationUncheckedCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneUncheckedCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1031,11 +1149,16 @@ export type UserUpdateWithoutSessionsInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutUserNestedInput
   musicGenerations?: Prisma.MusicGenerationUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1065,11 +1188,16 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutUserNestedInput
   musicGenerations?: Prisma.MusicGenerationUncheckedUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUncheckedUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -1099,11 +1227,16 @@ export type UserCreateWithoutAccountsInput = {
   bunnyApiKeyAddedAt?: Date | string | null
   bunnyStorageZone?: string | null
   bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutUserInput
   musicGenerations?: Prisma.MusicGenerationCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -1133,11 +1266,16 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   bunnyApiKeyAddedAt?: Date | string | null
   bunnyStorageZone?: string | null
   bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutUserInput
   musicGenerations?: Prisma.MusicGenerationUncheckedCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneUncheckedCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1183,11 +1321,16 @@ export type UserUpdateWithoutAccountsInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutUserNestedInput
   musicGenerations?: Prisma.MusicGenerationUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1217,11 +1360,16 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutUserNestedInput
   musicGenerations?: Prisma.MusicGenerationUncheckedUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUncheckedUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubscriptionEventsInput = {
@@ -1251,11 +1399,16 @@ export type UserCreateWithoutSubscriptionEventsInput = {
   bunnyApiKeyAddedAt?: Date | string | null
   bunnyStorageZone?: string | null
   bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   musicGenerations?: Prisma.MusicGenerationCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubscriptionEventsInput = {
@@ -1285,11 +1438,16 @@ export type UserUncheckedCreateWithoutSubscriptionEventsInput = {
   bunnyApiKeyAddedAt?: Date | string | null
   bunnyStorageZone?: string | null
   bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   musicGenerations?: Prisma.MusicGenerationUncheckedCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneUncheckedCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubscriptionEventsInput = {
@@ -1335,11 +1493,16 @@ export type UserUpdateWithoutSubscriptionEventsInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   musicGenerations?: Prisma.MusicGenerationUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionEventsInput = {
@@ -1369,11 +1532,16 @@ export type UserUncheckedUpdateWithoutSubscriptionEventsInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   musicGenerations?: Prisma.MusicGenerationUncheckedUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUncheckedUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMusicGenerationsInput = {
@@ -1403,11 +1571,16 @@ export type UserCreateWithoutMusicGenerationsInput = {
   bunnyApiKeyAddedAt?: Date | string | null
   bunnyStorageZone?: string | null
   bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMusicGenerationsInput = {
@@ -1437,11 +1610,16 @@ export type UserUncheckedCreateWithoutMusicGenerationsInput = {
   bunnyApiKeyAddedAt?: Date | string | null
   bunnyStorageZone?: string | null
   bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneUncheckedCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMusicGenerationsInput = {
@@ -1487,11 +1665,16 @@ export type UserUpdateWithoutMusicGenerationsInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMusicGenerationsInput = {
@@ -1521,11 +1704,360 @@ export type UserUncheckedUpdateWithoutMusicGenerationsInput = {
   bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUncheckedUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutVoiceClonesInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: boolean
+  role?: string
+  stripeCustomerId?: string | null
+  subscriptionStatus?: string | null
+  subscriptionTier?: string | null
+  subscriptionPeriodEnd?: Date | string | null
+  cancelAtPeriodEnd?: boolean
+  onboardingComplete?: boolean
+  hasPlatformAccess?: boolean
+  platformPurchaseDate?: Date | string | null
+  platformStripePaymentId?: string | null
+  falApiKey?: string | null
+  falApiKeyLastFour?: string | null
+  falApiKeyAddedAt?: Date | string | null
+  minimaxApiKey?: string | null
+  minimaxApiKeyLastFour?: string | null
+  minimaxApiKeyAddedAt?: Date | string | null
+  bunnyApiKey?: string | null
+  bunnyApiKeyLastFour?: string | null
+  bunnyApiKeyAddedAt?: Date | string | null
+  bunnyStorageZone?: string | null
+  bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutUserInput
+  musicGenerations?: Prisma.MusicGenerationCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutVoiceClonesInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: boolean
+  role?: string
+  stripeCustomerId?: string | null
+  subscriptionStatus?: string | null
+  subscriptionTier?: string | null
+  subscriptionPeriodEnd?: Date | string | null
+  cancelAtPeriodEnd?: boolean
+  onboardingComplete?: boolean
+  hasPlatformAccess?: boolean
+  platformPurchaseDate?: Date | string | null
+  platformStripePaymentId?: string | null
+  falApiKey?: string | null
+  falApiKeyLastFour?: string | null
+  falApiKeyAddedAt?: Date | string | null
+  minimaxApiKey?: string | null
+  minimaxApiKeyLastFour?: string | null
+  minimaxApiKeyAddedAt?: Date | string | null
+  bunnyApiKey?: string | null
+  bunnyApiKeyLastFour?: string | null
+  bunnyApiKeyAddedAt?: Date | string | null
+  bunnyStorageZone?: string | null
+  bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutUserInput
+  musicGenerations?: Prisma.MusicGenerationUncheckedCreateNestedManyWithoutUserInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutVoiceClonesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVoiceClonesInput, Prisma.UserUncheckedCreateWithoutVoiceClonesInput>
+}
+
+export type UserUpsertWithoutVoiceClonesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVoiceClonesInput, Prisma.UserUncheckedUpdateWithoutVoiceClonesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVoiceClonesInput, Prisma.UserUncheckedCreateWithoutVoiceClonesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVoiceClonesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVoiceClonesInput, Prisma.UserUncheckedUpdateWithoutVoiceClonesInput>
+}
+
+export type UserUpdateWithoutVoiceClonesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionTier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelAtPeriodEnd?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasPlatformAccess?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  platformPurchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  platformStripePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minimaxApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimaxApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimaxApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bunnyApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutUserNestedInput
+  musicGenerations?: Prisma.MusicGenerationUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVoiceClonesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionTier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelAtPeriodEnd?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasPlatformAccess?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  platformPurchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  platformStripePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minimaxApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimaxApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimaxApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bunnyApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutUserNestedInput
+  musicGenerations?: Prisma.MusicGenerationUncheckedUpdateManyWithoutUserNestedInput
+  voiceConversions?: Prisma.VoiceConversionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutVoiceConversionsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: boolean
+  role?: string
+  stripeCustomerId?: string | null
+  subscriptionStatus?: string | null
+  subscriptionTier?: string | null
+  subscriptionPeriodEnd?: Date | string | null
+  cancelAtPeriodEnd?: boolean
+  onboardingComplete?: boolean
+  hasPlatformAccess?: boolean
+  platformPurchaseDate?: Date | string | null
+  platformStripePaymentId?: string | null
+  falApiKey?: string | null
+  falApiKeyLastFour?: string | null
+  falApiKeyAddedAt?: Date | string | null
+  minimaxApiKey?: string | null
+  minimaxApiKeyLastFour?: string | null
+  minimaxApiKeyAddedAt?: Date | string | null
+  bunnyApiKey?: string | null
+  bunnyApiKeyLastFour?: string | null
+  bunnyApiKeyAddedAt?: Date | string | null
+  bunnyStorageZone?: string | null
+  bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutUserInput
+  musicGenerations?: Prisma.MusicGenerationCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutVoiceConversionsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: boolean
+  role?: string
+  stripeCustomerId?: string | null
+  subscriptionStatus?: string | null
+  subscriptionTier?: string | null
+  subscriptionPeriodEnd?: Date | string | null
+  cancelAtPeriodEnd?: boolean
+  onboardingComplete?: boolean
+  hasPlatformAccess?: boolean
+  platformPurchaseDate?: Date | string | null
+  platformStripePaymentId?: string | null
+  falApiKey?: string | null
+  falApiKeyLastFour?: string | null
+  falApiKeyAddedAt?: Date | string | null
+  minimaxApiKey?: string | null
+  minimaxApiKeyLastFour?: string | null
+  minimaxApiKeyAddedAt?: Date | string | null
+  bunnyApiKey?: string | null
+  bunnyApiKeyLastFour?: string | null
+  bunnyApiKeyAddedAt?: Date | string | null
+  bunnyStorageZone?: string | null
+  bunnyPullZone?: string | null
+  replicateApiKey?: string | null
+  replicateApiKeyLastFour?: string | null
+  replicateApiKeyAddedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutUserInput
+  musicGenerations?: Prisma.MusicGenerationUncheckedCreateNestedManyWithoutUserInput
+  voiceClones?: Prisma.VoiceCloneUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutVoiceConversionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVoiceConversionsInput, Prisma.UserUncheckedCreateWithoutVoiceConversionsInput>
+}
+
+export type UserUpsertWithoutVoiceConversionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVoiceConversionsInput, Prisma.UserUncheckedUpdateWithoutVoiceConversionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVoiceConversionsInput, Prisma.UserUncheckedCreateWithoutVoiceConversionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVoiceConversionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVoiceConversionsInput, Prisma.UserUncheckedUpdateWithoutVoiceConversionsInput>
+}
+
+export type UserUpdateWithoutVoiceConversionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionTier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelAtPeriodEnd?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasPlatformAccess?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  platformPurchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  platformStripePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minimaxApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimaxApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimaxApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bunnyApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutUserNestedInput
+  musicGenerations?: Prisma.MusicGenerationUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVoiceConversionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionTier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelAtPeriodEnd?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasPlatformAccess?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  platformPurchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  platformStripePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  falApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minimaxApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimaxApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimaxApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bunnyApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bunnyStorageZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyPullZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyLastFour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replicateApiKeyAddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutUserNestedInput
+  musicGenerations?: Prisma.MusicGenerationUncheckedUpdateManyWithoutUserNestedInput
+  voiceClones?: Prisma.VoiceCloneUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1538,6 +2070,8 @@ export type UserCountOutputType = {
   sessions: number
   subscriptionEvents: number
   musicGenerations: number
+  voiceClones: number
+  voiceConversions: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1545,6 +2079,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   subscriptionEvents?: boolean | UserCountOutputTypeCountSubscriptionEventsArgs
   musicGenerations?: boolean | UserCountOutputTypeCountMusicGenerationsArgs
+  voiceClones?: boolean | UserCountOutputTypeCountVoiceClonesArgs
+  voiceConversions?: boolean | UserCountOutputTypeCountVoiceConversionsArgs
 }
 
 /**
@@ -1585,6 +2121,20 @@ export type UserCountOutputTypeCountMusicGenerationsArgs<ExtArgs extends runtime
   where?: Prisma.MusicGenerationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVoiceClonesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VoiceCloneWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVoiceConversionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VoiceConversionWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1613,12 +2163,17 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   bunnyApiKeyAddedAt?: boolean
   bunnyStorageZone?: boolean
   bunnyPullZone?: boolean
+  replicateApiKey?: boolean
+  replicateApiKeyLastFour?: boolean
+  replicateApiKeyAddedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   subscriptionEvents?: boolean | Prisma.User$subscriptionEventsArgs<ExtArgs>
   musicGenerations?: boolean | Prisma.User$musicGenerationsArgs<ExtArgs>
+  voiceClones?: boolean | Prisma.User$voiceClonesArgs<ExtArgs>
+  voiceConversions?: boolean | Prisma.User$voiceConversionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1649,6 +2204,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   bunnyApiKeyAddedAt?: boolean
   bunnyStorageZone?: boolean
   bunnyPullZone?: boolean
+  replicateApiKey?: boolean
+  replicateApiKeyLastFour?: boolean
+  replicateApiKeyAddedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -1680,6 +2238,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   bunnyApiKeyAddedAt?: boolean
   bunnyStorageZone?: boolean
   bunnyPullZone?: boolean
+  replicateApiKey?: boolean
+  replicateApiKeyLastFour?: boolean
+  replicateApiKeyAddedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -1711,16 +2272,21 @@ export type UserSelectScalar = {
   bunnyApiKeyAddedAt?: boolean
   bunnyStorageZone?: boolean
   bunnyPullZone?: boolean
+  replicateApiKey?: boolean
+  replicateApiKeyLastFour?: boolean
+  replicateApiKeyAddedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "image" | "emailVerified" | "role" | "stripeCustomerId" | "subscriptionStatus" | "subscriptionTier" | "subscriptionPeriodEnd" | "cancelAtPeriodEnd" | "onboardingComplete" | "hasPlatformAccess" | "platformPurchaseDate" | "platformStripePaymentId" | "falApiKey" | "falApiKeyLastFour" | "falApiKeyAddedAt" | "minimaxApiKey" | "minimaxApiKeyLastFour" | "minimaxApiKeyAddedAt" | "bunnyApiKey" | "bunnyApiKeyLastFour" | "bunnyApiKeyAddedAt" | "bunnyStorageZone" | "bunnyPullZone" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "image" | "emailVerified" | "role" | "stripeCustomerId" | "subscriptionStatus" | "subscriptionTier" | "subscriptionPeriodEnd" | "cancelAtPeriodEnd" | "onboardingComplete" | "hasPlatformAccess" | "platformPurchaseDate" | "platformStripePaymentId" | "falApiKey" | "falApiKeyLastFour" | "falApiKeyAddedAt" | "minimaxApiKey" | "minimaxApiKeyLastFour" | "minimaxApiKeyAddedAt" | "bunnyApiKey" | "bunnyApiKeyLastFour" | "bunnyApiKeyAddedAt" | "bunnyStorageZone" | "bunnyPullZone" | "replicateApiKey" | "replicateApiKeyLastFour" | "replicateApiKeyAddedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   subscriptionEvents?: boolean | Prisma.User$subscriptionEventsArgs<ExtArgs>
   musicGenerations?: boolean | Prisma.User$musicGenerationsArgs<ExtArgs>
+  voiceClones?: boolean | Prisma.User$voiceClonesArgs<ExtArgs>
+  voiceConversions?: boolean | Prisma.User$voiceConversionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1733,6 +2299,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     subscriptionEvents: Prisma.$SubscriptionEventPayload<ExtArgs>[]
     musicGenerations: Prisma.$MusicGenerationPayload<ExtArgs>[]
+    voiceClones: Prisma.$VoiceClonePayload<ExtArgs>[]
+    voiceConversions: Prisma.$VoiceConversionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1761,6 +2329,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     bunnyApiKeyAddedAt: Date | null
     bunnyStorageZone: string | null
     bunnyPullZone: string | null
+    replicateApiKey: string | null
+    replicateApiKeyLastFour: string | null
+    replicateApiKeyAddedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -2161,6 +2732,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscriptionEvents<T extends Prisma.User$subscriptionEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   musicGenerations<T extends Prisma.User$musicGenerationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$musicGenerationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MusicGenerationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  voiceClones<T extends Prisma.User$voiceClonesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$voiceClonesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VoiceClonePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  voiceConversions<T extends Prisma.User$voiceConversionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$voiceConversionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VoiceConversionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2216,6 +2789,9 @@ export interface UserFieldRefs {
   readonly bunnyApiKeyAddedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly bunnyStorageZone: Prisma.FieldRef<"User", 'String'>
   readonly bunnyPullZone: Prisma.FieldRef<"User", 'String'>
+  readonly replicateApiKey: Prisma.FieldRef<"User", 'String'>
+  readonly replicateApiKeyLastFour: Prisma.FieldRef<"User", 'String'>
+  readonly replicateApiKeyAddedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -2697,6 +3273,54 @@ export type User$musicGenerationsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.MusicGenerationScalarFieldEnum | Prisma.MusicGenerationScalarFieldEnum[]
+}
+
+/**
+ * User.voiceClones
+ */
+export type User$voiceClonesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VoiceClone
+   */
+  select?: Prisma.VoiceCloneSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VoiceClone
+   */
+  omit?: Prisma.VoiceCloneOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VoiceCloneInclude<ExtArgs> | null
+  where?: Prisma.VoiceCloneWhereInput
+  orderBy?: Prisma.VoiceCloneOrderByWithRelationInput | Prisma.VoiceCloneOrderByWithRelationInput[]
+  cursor?: Prisma.VoiceCloneWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VoiceCloneScalarFieldEnum | Prisma.VoiceCloneScalarFieldEnum[]
+}
+
+/**
+ * User.voiceConversions
+ */
+export type User$voiceConversionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VoiceConversion
+   */
+  select?: Prisma.VoiceConversionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VoiceConversion
+   */
+  omit?: Prisma.VoiceConversionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VoiceConversionInclude<ExtArgs> | null
+  where?: Prisma.VoiceConversionWhereInput
+  orderBy?: Prisma.VoiceConversionOrderByWithRelationInput | Prisma.VoiceConversionOrderByWithRelationInput[]
+  cursor?: Prisma.VoiceConversionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VoiceConversionScalarFieldEnum | Prisma.VoiceConversionScalarFieldEnum[]
 }
 
 /**

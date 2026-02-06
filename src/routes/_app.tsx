@@ -1,4 +1,5 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { Music } from 'lucide-react'
 import { getSessionFn } from '../server/auth.fn'
 import { useSession } from '../lib/auth-client'
 import { AppSidebar } from '../components/app-sidebar'
@@ -7,7 +8,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '../components/ui/sidebar'
-import { Separator } from '../components/ui/separator'
 
 // Type for the user from Better-Auth session
 interface AppUser {
@@ -47,15 +47,19 @@ function AppLayout() {
     <SidebarProvider>
       <AppSidebar user={user} />
       <SidebarInset>
-        {/* Mobile Header */}
-        <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4 md:hidden">
+        {/* Premium Mobile Header */}
+        <header className="flex h-16 shrink-0 items-center gap-3 border-b border-border/50 px-4 md:hidden bg-background/80 backdrop-blur-sm">
           <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
-          <span className="font-semibold">AI Music Studio</span>
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-primary/5">
+              <Music className="h-4 w-4 text-primary" />
+            </div>
+            <span className="font-semibold tracking-tight">AI Studio</span>
+          </div>
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 p-4 md:p-6">
+        {/* Page Content with refined spacing */}
+        <main className="flex-1 p-4 md:p-8 lg:p-10">
           <Outlet />
         </main>
       </SidebarInset>

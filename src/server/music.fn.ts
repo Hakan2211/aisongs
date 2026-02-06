@@ -15,25 +15,23 @@ import { z } from 'zod'
 import { authMiddleware } from './middleware'
 import { decrypt } from './services/encryption.server'
 import {
-  
   cancelMusicGeneration,
   checkMusicGenerationStatus,
   isMockMode,
   isQueueBasedProvider,
-  submitMusicGeneration
+  submitMusicGeneration,
 } from './services/music.service'
 import {
   generateMusicWithMiniMax,
   isMiniMaxMockMode,
 } from './services/minimax.service'
 import {
-  
   deleteAudioFromBunny,
   getAudioFilename,
-  uploadAudioToBunny
+  uploadAudioToBunny,
 } from './services/bunny.service'
-import type {MusicProvider} from './services/music.service';
-import type {BunnySettings} from './services/bunny.service';
+import type { MusicProvider } from './services/music.service'
+import type { BunnySettings } from './services/bunny.service'
 import { prisma } from '@/db'
 
 // ============================================================================
@@ -113,7 +111,7 @@ async function getUserBunnySettings(
     },
   })
 
-  if (!user?.bunnyApiKey || !user?.bunnyStorageZone || !user?.bunnyPullZone) {
+  if (!user?.bunnyApiKey || !user.bunnyStorageZone || !user.bunnyPullZone) {
     return null
   }
 
@@ -194,40 +192,46 @@ export const generateMusicFn = createServerFn({ method: 'POST' })
     } = data
 
     // Validate provider-specific requirements
-    if (provider === 'elevenlabs') {
-      if (!prompt || prompt.trim().length < 10) {
-        throw new Error(
-          'ElevenLabs requires a prompt of at least 10 characters',
-        )
-      }
-      if (prompt.length > 300) {
-        throw new Error('ElevenLabs prompt must be 300 characters or less')
-      }
-    } else if (provider === 'minimax-v2') {
-      if (!prompt || prompt.trim().length < 10) {
-        throw new Error(
-          'MiniMax v2 requires a style prompt of at least 10 characters',
-        )
-      }
-      if (prompt.length > 300) {
-        throw new Error('MiniMax v2 prompt must be 300 characters or less')
-      }
-      if (!lyrics || lyrics.trim().length < 10) {
-        throw new Error('MiniMax v2 requires lyrics of at least 10 characters')
-      }
-      if (lyrics.length > 3000) {
-        throw new Error('MiniMax v2 lyrics must be 3000 characters or less')
-      }
-    } else if (provider === 'minimax-v2.5') {
-      if (!lyrics || lyrics.trim().length < 1) {
-        throw new Error('MiniMax v2.5 requires lyrics')
-      }
-      if (lyrics.length > 3500) {
-        throw new Error('MiniMax v2.5 lyrics must be 3500 characters or less')
-      }
-      if (prompt && prompt.length > 2000) {
-        throw new Error('MiniMax v2.5 prompt must be 2000 characters or less')
-      }
+    switch (provider) {
+      case 'elevenlabs':
+        if (!prompt || prompt.trim().length < 10) {
+          throw new Error(
+            'ElevenLabs requires a prompt of at least 10 characters',
+          )
+        }
+        if (prompt.length > 300) {
+          throw new Error('ElevenLabs prompt must be 300 characters or less')
+        }
+        break
+      case 'minimax-v2':
+        if (!prompt || prompt.trim().length < 10) {
+          throw new Error(
+            'MiniMax v2 requires a style prompt of at least 10 characters',
+          )
+        }
+        if (prompt.length > 300) {
+          throw new Error('MiniMax v2 prompt must be 300 characters or less')
+        }
+        if (!lyrics || lyrics.trim().length < 10) {
+          throw new Error(
+            'MiniMax v2 requires lyrics of at least 10 characters',
+          )
+        }
+        if (lyrics.length > 3000) {
+          throw new Error('MiniMax v2 lyrics must be 3000 characters or less')
+        }
+        break
+      case 'minimax-v2.5':
+        if (!lyrics || lyrics.trim().length < 1) {
+          throw new Error('MiniMax v2.5 requires lyrics')
+        }
+        if (lyrics.length > 3500) {
+          throw new Error('MiniMax v2.5 lyrics must be 3500 characters or less')
+        }
+        if (prompt && prompt.length > 2000) {
+          throw new Error('MiniMax v2.5 prompt must be 2000 characters or less')
+        }
+        break
     }
 
     // Handle MiniMax v2.5 separately (direct API, synchronous)
