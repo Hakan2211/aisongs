@@ -30,7 +30,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'AI Studio - AI Music Generation',
+        title: 'AI Music Studio - AI Music Generation',
       },
     ],
     links: [

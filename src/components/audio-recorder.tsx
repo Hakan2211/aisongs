@@ -95,7 +95,7 @@ export function AudioRecorder({
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
-  const chunksRef = useRef<Blob[]>([])
+  const chunksRef = useRef<Array<Blob>>([])
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const blobRef = useRef<Blob | null>(null)

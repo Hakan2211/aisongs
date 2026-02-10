@@ -1,12 +1,17 @@
 import { Link } from '@tanstack/react-router'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/common'
 import { cn } from '@/lib/utils'
 import { useIsMobile } from '@/hooks/use-mobile'
 
-export function LandingHeader() {
+interface LandingHeaderProps {
+  isLoggedIn?: boolean
+}
+
+export function LandingHeader({ isLoggedIn = false }: LandingHeaderProps) {
   const { scrollY } = useScroll()
   const [isScrolled, setIsScrolled] = useState(false)
   const isMobile = useIsMobile()
@@ -55,9 +60,14 @@ export function LandingHeader() {
       >
         <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group cursor-pointer">
+          <Link
+            to="/"
+            className="flex items-center gap-2.5 group cursor-pointer"
+          >
             <Logo size={32} />
-            <span className="text-xl font-bold">AI Music Studio</span>
+            <span className="text-lg font-bold tracking-tight">
+              AI Music Studio
+            </span>
           </Link>
 
           {/* Navigation */}
@@ -68,9 +78,7 @@ export function LandingHeader() {
                 onClick={() => scrollToSection(section)}
                 className={cn(
                   'text-sm font-medium transition-colors cursor-pointer relative group capitalize',
-                  isScrolled
-                    ? 'text-muted-foreground hover:text-foreground'
-                    : 'text-muted-foreground hover:text-foreground',
+                  'text-muted-foreground hover:text-foreground',
                 )}
               >
                 {section.replace(/-/g, ' ')}
@@ -79,16 +87,27 @@ export function LandingHeader() {
             ))}
           </nav>
 
-          {/* Auth Buttons */}
+          {/* Auth Buttons — context-aware */}
           <div className="flex items-center gap-3">
-            <Link to="/login">
-              <Button variant="ghost" size="sm">
-                Sign in
-              </Button>
-            </Link>
-            <Link to="/signup">
-              <Button size="sm">Get Started</Button>
-            </Link>
+            {isLoggedIn ? (
+              <Link to="/music">
+                <Button size="sm" className="group">
+                  Go to Studio
+                  <ArrowRight className="ml-1.5 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button variant="ghost" size="sm">
+                    Sign in
+                  </Button>
+                </Link>
+                <Link to="/signup">
+                  <Button size="sm">Get Started</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </motion.header>

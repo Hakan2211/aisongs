@@ -4,7 +4,7 @@ import { getSessionFn } from '../server/auth.fn'
 /**
  * Auth Layout
  * Centered layout for authentication pages (login, signup)
- * Redirects to dashboard if already authenticated
+ * Redirects to music if already authenticated
  */
 export const Route = createFileRoute('/_auth')({
   beforeLoad: async () => {
@@ -18,8 +18,12 @@ export const Route = createFileRoute('/_auth')({
 
 function AuthLayout() {
   return (
-    <div className="grid min-h-screen place-items-center bg-muted/40 px-4">
-      <Outlet />
+    <div className="relative grid min-h-screen place-items-center px-4 py-12">
+      {/* Subtle background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-muted/40 via-background to-muted/20 pointer-events-none" />
+      <div className="relative z-10 w-full">
+        <Outlet />
+      </div>
     </div>
   )
 }

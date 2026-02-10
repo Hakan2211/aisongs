@@ -78,7 +78,7 @@ interface ConversionSummary {
 interface Generation extends Track {
   progress: number
   error: string | null
-  voiceConversions?: ConversionSummary[]
+  voiceConversions?: Array<ConversionSummary>
 }
 
 // Model configuration for dropdown
@@ -1165,6 +1165,7 @@ Singing our favorite song`}
                                       {conversion.error}
                                     </div>
                                   )}
+
                                 </div>
                               )
                             })}

@@ -7,7 +7,7 @@ import { updateProfileFn } from '../../server/auth.fn'
 import {
   createBillingPortalFn,
   createCheckoutFn,
-  getSubscriptionFn,
+  getPlatformAccessFn,
 } from '../../server/billing.fn'
 import { useSession } from '../../lib/auth-client'
 import { Button } from '../../components/ui/button'
@@ -50,9 +50,9 @@ function ProfilePage() {
   const userEmail = user?.email || ''
   const userRole = user?.role || 'user'
 
-  const { data: subscription } = useQuery({
-    queryKey: ['subscription'],
-    queryFn: () => getSubscriptionFn(),
+  const { data: platformAccess } = useQuery({
+    queryKey: ['platformAccess'],
+    queryFn: () => getPlatformAccessFn(),
   })
 
   const updateMutation = useMutation({
@@ -171,53 +171,61 @@ function ProfilePage() {
         </form>
       </div>
 
-      {/* Subscription */}
+      {/* Platform Access */}
       <div className="max-w-2xl rounded-lg border bg-card p-6">
-        <h2 className="mb-4 text-xl font-semibold">Subscription</h2>
+        <h2 className="mb-4 text-xl font-semibold">Platform Access</h2>
 
         <div className="mb-6 rounded-lg bg-muted/50 p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">
-                {subscription?.hasPlatformAccess
-                  ? 'Platform Access'
+                {platformAccess?.hasPlatformAccess
+                  ? 'Lifetime Access'
                   : 'No Access'}
               </p>
               <p className="text-sm text-muted-foreground">
-                {subscription?.hasPlatformAccess
-                  ? 'You have full access to AI music generation'
-                  : 'Purchase access to start generating AI music'}
+                {platformAccess?.hasPlatformAccess
+                  ? 'You have lifetime access to AI music generation'
+                  : 'Purchase lifetime access to start generating AI music'}
               </p>
+              {platformAccess?.purchaseDate && (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Purchased on{' '}
+                  {new Date(platformAccess.purchaseDate).toLocaleDateString()}
+                </p>
+              )}
             </div>
             <div className="text-right">
               <span
                 className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                  subscription?.hasPlatformAccess
+                  platformAccess?.hasPlatformAccess
                     ? 'bg-green-500/10 text-green-600'
                     : 'bg-muted text-muted-foreground'
                 }`}
               >
-                {subscription?.hasPlatformAccess ? 'Active' : 'Inactive'}
+                {platformAccess?.hasPlatformAccess ? 'Active' : 'Inactive'}
               </span>
             </div>
           </div>
         </div>
 
         <div className="flex gap-4">
-          {subscription?.hasPlatformAccess ? (
+          {platformAccess?.hasPlatformAccess ? (
             <Button
               variant="outline"
               onClick={() => portalMutation.mutate()}
               disabled={portalMutation.isPending}
             >
-              {portalMutation.isPending ? 'Loading...' : 'Manage Billing'}
+              {portalMutation.isPending ? 'Loading...' : 'Payment History'}
             </Button>
           ) : (
             <Button
               onClick={() => checkoutMutation.mutate()}
               disabled={checkoutMutation.isPending}
             >
-              {checkoutMutation.isPending ? 'Loading...' : 'Purchase Access'}
+              {checkoutMutation.isPending
+                ? 'Loading...'
+                : 'Purchase Lifetime Access'}
             </Button>
           )}
         </div>

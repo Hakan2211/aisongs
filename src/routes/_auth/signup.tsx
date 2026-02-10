@@ -7,6 +7,7 @@ import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
 import { Honeypot, isHoneypotFilled } from '../../components/common/Honeypot'
+import { Logo } from '../../components/common'
 
 export const Route = createFileRoute('/_auth/signup')({
   component: SignupPage,
@@ -65,26 +66,37 @@ function SignupPage() {
   })
 
   return (
-    <div className="w-full max-w-md space-y-8">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Create an account</h1>
-        <p className="mt-2 text-muted-foreground">
-          Get started with your free account
-        </p>
+    <div className="w-full max-w-md mx-auto space-y-8">
+      {/* Brand + Heading */}
+      <div className="text-center space-y-4">
+        <Link to="/" className="inline-flex items-center gap-2.5 group">
+          <Logo size={36} />
+          <span className="text-lg font-bold tracking-tight">
+            AI Music Studio
+          </span>
+        </Link>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Create your account
+          </h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            Start creating AI music in minutes
+          </p>
+        </div>
       </div>
 
-      <div className="rounded-lg border bg-card p-8 shadow-sm">
+      <div className="rounded-xl border bg-card p-8 shadow-sm">
         <form
           onSubmit={(e) => {
             e.preventDefault()
             form.handleSubmit()
           }}
-          className="space-y-6"
+          className="space-y-5"
         >
           <Honeypot />
 
           {error && (
-            <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
               {error}
             </div>
           )}
@@ -106,10 +118,11 @@ function SignupPage() {
                 <Input
                   id="name"
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Your name"
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
+                  className="h-11"
                 />
                 {field.state.meta.errors.length > 0 && (
                   <p className="text-sm text-destructive">
@@ -141,6 +154,7 @@ function SignupPage() {
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
+                  className="h-11"
                 />
                 {field.state.meta.errors.length > 0 && (
                   <p className="text-sm text-destructive">
@@ -168,10 +182,11 @@ function SignupPage() {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Min. 8 characters"
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
+                  className="h-11"
                 />
                 {field.state.meta.errors.length > 0 && (
                   <p className="text-sm text-destructive">
@@ -182,7 +197,7 @@ function SignupPage() {
             )}
           </form.Field>
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full h-11" disabled={loading}>
             {loading ? 'Creating account...' : 'Create account'}
           </Button>
         </form>
@@ -201,7 +216,7 @@ function SignupPage() {
 
           <Button
             variant="outline"
-            className="mt-4 w-full"
+            className="mt-4 w-full h-11"
             onClick={() =>
               (window.location.href =
                 '/api/auth/sign-in/social?provider=google')

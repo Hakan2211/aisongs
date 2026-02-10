@@ -37,7 +37,7 @@ export function LandingFooter() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <Logo size="sm" />
+              <Logo size={28} />
               <span className="text-xl font-bold">AI Music Studio</span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-xs">

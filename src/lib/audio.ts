@@ -91,7 +91,7 @@ function encodeWav(
   view.setUint32(40, dataSize, true)
 
   // Interleave channels and write 16-bit PCM samples
-  const channels: Float32Array[] = []
+  const channels: Array<Float32Array> = []
   for (let ch = 0; ch < numberOfChannels; ch++) {
     channels.push(audioBuffer.getChannelData(ch))
   }

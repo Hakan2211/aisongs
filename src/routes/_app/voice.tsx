@@ -864,6 +864,8 @@ interface ConversionCardProps {
       id: string
       title: string | null
       prompt: string
+      lyrics: string | null
+      audioDurationMs: number | null
     } | null
   }
   onDelete: (id: string) => void
@@ -1027,6 +1029,7 @@ function ConversionCard({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
     </>
   )
 }

@@ -2,9 +2,11 @@ import Stripe from 'stripe'
 import { prisma } from '../db'
 
 /**
- * Stripe Adapter Pattern
+ * Stripe Adapter — One-Time Payment (EUR 199 Lifetime Access)
+ *
  * - When MOCK_PAYMENTS=true or no STRIPE_SECRET_KEY, returns mock responses
- * - This allows development without Stripe credentials
+ * - Uses mode: 'payment' for a single one-time charge
+ * - Gates access via the `hasPlatformAccess` boolean on the User model
  */
 
 const MOCK_PAYMENTS = process.env.MOCK_PAYMENTS === 'true'
@@ -20,10 +22,9 @@ export interface CheckoutResult {
   url: string
 }
 
-export interface SubscriptionStatus {
-  status: 'active' | 'canceled' | 'past_due' | 'trialing' | 'none'
-  plan: string | null
+export interface PlatformAccessStatus {
   hasPlatformAccess: boolean
+  purchaseDate: Date | null
 }
 
 export async function createCheckoutSession(
@@ -35,7 +36,18 @@ export async function createCheckoutSession(
   const stripe = getStripeClient()
 
   if (!stripe) {
-    console.log(`[MOCK STRIPE] Created checkout session for user: ${userId}`)
+    // Mock mode: grant access immediately and redirect to success
+    console.log(
+      `[MOCK STRIPE] Created one-time checkout for user: ${userId} — granting access`,
+    )
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        hasPlatformAccess: true,
+        platformPurchaseDate: new Date(),
+        platformStripePaymentId: `mock_payment_${Date.now()}`,
+      },
+    })
     return { url: `${successUrl}?session_id=mock_session_${Date.now()}` }
   }
 
@@ -63,7 +75,7 @@ export async function createCheckoutSession(
     customer: customerId,
     payment_method_types: ['card'],
     line_items: [{ price: priceId, quantity: 1 }],
-    mode: 'subscription',
+    mode: 'payment',
     success_url: successUrl,
     cancel_url: cancelUrl,
     metadata: { userId },
@@ -76,36 +88,27 @@ export async function createCheckoutSession(
   return { url: session.url }
 }
 
-export async function getSubscriptionStatus(
+export async function getPlatformAccessStatus(
   userId: string,
-): Promise<SubscriptionStatus> {
+): Promise<PlatformAccessStatus> {
   const stripe = getStripeClient()
 
   if (!stripe) {
-    // In mock mode, always return active with platform access
-    return { status: 'active', plan: 'pro', hasPlatformAccess: true }
+    // Mock mode: always return active platform access
+    return { hasPlatformAccess: true, purchaseDate: new Date() }
   }
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: {
-      subscriptionStatus: true,
       hasPlatformAccess: true,
+      platformPurchaseDate: true,
     },
   })
 
-  if (!user?.subscriptionStatus) {
-    return {
-      status: 'none',
-      plan: null,
-      hasPlatformAccess: user?.hasPlatformAccess ?? false,
-    }
-  }
-
   return {
-    status: user.subscriptionStatus as SubscriptionStatus['status'],
-    plan: user.subscriptionStatus === 'active' ? 'pro' : null,
-    hasPlatformAccess: user.hasPlatformAccess,
+    hasPlatformAccess: user?.hasPlatformAccess ?? false,
+    purchaseDate: user?.platformPurchaseDate ?? null,
   }
 }
 
@@ -138,48 +141,56 @@ export async function handleWebhook(
         await prisma.user.update({
           where: { id: userId },
           data: {
-            subscriptionStatus: 'active',
             hasPlatformAccess: true,
             platformPurchaseDate: new Date(),
             platformStripePaymentId: session.payment_intent as string | null,
           },
         })
+
+        // Record the purchase event for audit
+        await prisma.subscriptionEvent.create({
+          data: {
+            userId,
+            event: 'platform_purchase',
+            toTier: 'lifetime',
+            stripeEventId: event.id,
+            metadata: JSON.stringify({
+              amount: session.amount_total,
+              currency: session.currency,
+              paymentIntent: session.payment_intent,
+            }),
+          },
+        })
       }
       break
     }
-    case 'customer.subscription.deleted': {
-      const subscription = event.data.object
-      const customer = subscription.customer
-      const customerId = typeof customer === 'string' ? customer : customer.id
-      if (customerId) {
+
+    case 'charge.refunded': {
+      // Handle refunds — revoke platform access
+      const charge = event.data.object as Stripe.Charge
+      const paymentIntent =
+        typeof charge.payment_intent === 'string'
+          ? charge.payment_intent
+          : charge.payment_intent?.id
+      if (paymentIntent) {
         const user = await prisma.user.findFirst({
-          where: { stripeCustomerId: customerId },
+          where: { platformStripePaymentId: paymentIntent },
         })
         if (user) {
           await prisma.user.update({
             where: { id: user.id },
-            data: { subscriptionStatus: 'canceled' },
+            data: { hasPlatformAccess: false },
           })
-        }
-      }
-      break
-    }
-    case 'invoice.payment_failed': {
-      const invoice = event.data.object
-      const invoiceCustomer = invoice.customer
-      if (!invoiceCustomer) break
-      const customerId =
-        typeof invoiceCustomer === 'string'
-          ? invoiceCustomer
-          : invoiceCustomer.id
-      if (customerId) {
-        const user = await prisma.user.findFirst({
-          where: { stripeCustomerId: customerId },
-        })
-        if (user) {
-          await prisma.user.update({
-            where: { id: user.id },
-            data: { subscriptionStatus: 'past_due' },
+
+          await prisma.subscriptionEvent.create({
+            data: {
+              userId: user.id,
+              event: 'platform_refund',
+              fromTier: 'lifetime',
+              toTier: null,
+              stripeEventId: event.id,
+              metadata: JSON.stringify({ paymentIntent }),
+            },
           })
         }
       }

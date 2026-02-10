@@ -20,14 +20,14 @@ import {
   submitRVCConversion,
 } from './services/voice-conversion.service'
 import {
+  checkRvcTrainingStatus,
   createAudioZipBuffer,
   submitRvcTraining,
-  checkRvcTrainingStatus,
 } from './services/rvc-training.service'
 import {
-  uploadAudioToBunny,
-  uploadAudioBufferToBunny,
   deleteAudioFromBunny,
+  uploadAudioBufferToBunny,
+  uploadAudioToBunny,
 } from './services/bunny.service'
 import type { VoiceCloneProvider } from './services/voice-clone.service'
 
@@ -350,7 +350,7 @@ export const deleteVoiceCloneFn = createServerFn({ method: 'POST' })
     // Clean up CDN files if stored there
     const bunnySettings = await getUserBunnySettings(context.user.id)
     if (bunnySettings) {
-      const filesToDelete: string[] = []
+      const filesToDelete: Array<string> = []
 
       // Speaker embedding file
       if (voiceClone.sourceAudioStored && voiceClone.speakerEmbeddingUrl) {
@@ -521,7 +521,7 @@ export const trainRvcModelFn = createServerFn({ method: 'POST' })
     if (bunnySettings) {
       try {
         const filename = `rvc-datasets/${voiceClone.id}.zip`
-        const arrayBuf = new Uint8Array(zipBuffer).buffer as ArrayBuffer
+        const arrayBuf = new Uint8Array(zipBuffer).buffer
         const result = await uploadAudioBufferToBunny(
           bunnySettings,
           arrayBuf,
@@ -1022,6 +1022,8 @@ export const listVoiceConversionsFn = createServerFn({ method: 'GET' })
             id: true,
             title: true,
             prompt: true,
+            lyrics: true,
+            audioDurationMs: true,
           },
         },
       },

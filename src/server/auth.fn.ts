@@ -123,3 +123,17 @@ export const updateUserRoleFn = createServerFn({ method: 'POST' })
 
     return { success: true, user }
   })
+
+/**
+ * Complete onboarding — marks user as onboarded
+ */
+export const completeOnboardingFn = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    await prisma.user.update({
+      where: { id: context.user.id },
+      data: { onboardingComplete: true },
+    })
+
+    return { success: true }
+  })

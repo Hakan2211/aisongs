@@ -14,9 +14,9 @@
  * Supports mock mode for development without API keys.
  */
 
+import { Readable } from 'node:stream'
 import Replicate from 'replicate'
 import archiver from 'archiver'
-import { Readable } from 'stream'
 
 // ============================================================================
 // Configuration
@@ -138,7 +138,7 @@ export async function createAudioZipBuffer(audioUrl: string): Promise<Buffer> {
 
   // Create .zip with the audio file
   return new Promise<Buffer>((resolve, reject) => {
-    const chunks: Buffer[] = []
+    const chunks: Array<Buffer> = []
 
     const archive = archiver('zip', { zlib: { level: 5 } })
 

@@ -20,7 +20,7 @@ const faqs = [
   {
     question: 'How much does it cost to generate a track?',
     answer:
-      'The platform itself is a one-time €99 payment. For API usage, typical costs are $0.01-0.05 per track depending on the model and track length. fal.ai offers free credits to get started, so you can try before committing to paid usage.',
+      'The platform itself is a one-time €199 payment for lifetime access. For API usage, typical costs are $0.01-0.05 per track depending on the model and track length. fal.ai offers free credits to get started, so you can try before committing to paid usage.',
   },
   {
     question: 'Do I own the music I generate?',

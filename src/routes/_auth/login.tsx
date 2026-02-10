@@ -7,6 +7,7 @@ import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
 import { Honeypot, isHoneypotFilled } from '../../components/common/Honeypot'
+import { Logo } from '../../components/common'
 
 export const Route = createFileRoute('/_auth/login')({
   component: LoginPage,
@@ -62,26 +63,35 @@ function LoginPage() {
   })
 
   return (
-    <div className="w-full max-w-md space-y-8">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
-        <p className="mt-2 text-muted-foreground">
-          Sign in to your account to continue
-        </p>
+    <div className="w-full max-w-md mx-auto space-y-8">
+      {/* Brand + Heading */}
+      <div className="text-center space-y-4">
+        <Link to="/" className="inline-flex items-center gap-2.5 group">
+          <Logo size={36} />
+          <span className="text-lg font-bold tracking-tight">
+            AI Music Studio
+          </span>
+        </Link>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            Sign in to your account to continue
+          </p>
+        </div>
       </div>
 
-      <div className="rounded-lg border bg-card p-8 shadow-sm">
+      <div className="rounded-xl border bg-card p-8 shadow-sm">
         <form
           onSubmit={(e) => {
             e.preventDefault()
             form.handleSubmit()
           }}
-          className="space-y-6"
+          className="space-y-5"
         >
           <Honeypot />
 
           {error && (
-            <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
               {error}
             </div>
           )}
@@ -107,6 +117,7 @@ function LoginPage() {
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
+                  className="h-11"
                 />
                 {field.state.meta.errors.length > 0 && (
                   <p className="text-sm text-destructive">
@@ -134,10 +145,11 @@ function LoginPage() {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
+                  className="h-11"
                 />
                 {field.state.meta.errors.length > 0 && (
                   <p className="text-sm text-destructive">
@@ -148,7 +160,7 @@ function LoginPage() {
             )}
           </form.Field>
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full h-11" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign in'}
           </Button>
         </form>
@@ -167,7 +179,7 @@ function LoginPage() {
 
           <Button
             variant="outline"
-            className="mt-4 w-full"
+            className="mt-4 w-full h-11"
             onClick={() => signIn.social({ provider: 'google' })}
           >
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">

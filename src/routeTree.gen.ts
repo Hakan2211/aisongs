@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
@@ -18,15 +17,11 @@ import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AppVoiceRouteImport } from './routes/_app/voice'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
+import { Route as AppOnboardingRouteImport } from './routes/_app/onboarding'
 import { Route as AppMusicRouteImport } from './routes/_app/music'
 import { Route as AppAdminRouteImport } from './routes/_app/admin'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
@@ -65,6 +60,11 @@ const AppProfileRoute = AppProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AppRoute,
 } as any)
+const AppOnboardingRoute = AppOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMusicRoute = AppMusicRouteImport.update({
   id: '/music',
   path: '/music',
@@ -83,9 +83,9 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/pricing': typeof PricingRoute
   '/admin': typeof AppAdminRoute
   '/music': typeof AppMusicRoute
+  '/onboarding': typeof AppOnboardingRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
   '/voice': typeof AppVoiceRoute
@@ -95,9 +95,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/pricing': typeof PricingRoute
   '/admin': typeof AppAdminRoute
   '/music': typeof AppMusicRoute
+  '/onboarding': typeof AppOnboardingRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
   '/voice': typeof AppVoiceRoute
@@ -110,9 +110,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/_auth': typeof AuthRouteWithChildren
-  '/pricing': typeof PricingRoute
   '/_app/admin': typeof AppAdminRoute
   '/_app/music': typeof AppMusicRoute
+  '/_app/onboarding': typeof AppOnboardingRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/voice': typeof AppVoiceRoute
@@ -124,9 +124,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/pricing'
     | '/admin'
     | '/music'
+    | '/onboarding'
     | '/profile'
     | '/settings'
     | '/voice'
@@ -136,9 +136,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/pricing'
     | '/admin'
     | '/music'
+    | '/onboarding'
     | '/profile'
     | '/settings'
     | '/voice'
@@ -150,9 +150,9 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/_auth'
-    | '/pricing'
     | '/_app/admin'
     | '/_app/music'
+    | '/_app/onboarding'
     | '/_app/profile'
     | '/_app/settings'
     | '/_app/voice'
@@ -165,19 +165,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
-  PricingRoute: typeof PricingRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -234,6 +226,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/onboarding': {
+      id: '/_app/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AppOnboardingRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/music': {
       id: '/_app/music'
       path: '/music'
@@ -261,6 +260,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRoute
   AppMusicRoute: typeof AppMusicRoute
+  AppOnboardingRoute: typeof AppOnboardingRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppVoiceRoute: typeof AppVoiceRoute
@@ -269,6 +269,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRoute,
   AppMusicRoute: AppMusicRoute,
+  AppOnboardingRoute: AppOnboardingRoute,
   AppProfileRoute: AppProfileRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppVoiceRoute: AppVoiceRoute,
@@ -292,7 +293,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
-  PricingRoute: PricingRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
