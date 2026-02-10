@@ -91,7 +91,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
           </div>
           <div className="flex flex-col">
             <span className="font-semibold tracking-tight text-[15px]">
-              AI Music Studio
+              Songlar
             </span>
             <span className="text-[11px] text-muted-foreground">
               Music Generation

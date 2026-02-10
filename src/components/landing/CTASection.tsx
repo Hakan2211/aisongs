@@ -38,8 +38,8 @@ export function CTASection({ isLoggedIn = false }: CTASectionProps) {
             Ready to create your first track?
           </h2>
           <p className="text-lg md:text-xl opacity-90 mb-10 leading-relaxed">
-            Join creators using AI Music Studio to generate professional-quality
-            music. One-time payment, lifetime access, unlimited creativity.
+            Join creators using Songlar to generate professional-quality music.
+            One-time payment, lifetime access, unlimited creativity.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {isLoggedIn ? (

@@ -6,7 +6,7 @@ interface LogoProps {
 }
 
 /**
- * Logo component - Music note icon for AI Music Studio
+ * Logo component - Music note icon for Songlar
  * Can be replaced with custom SVG/image later
  */
 export function Logo({ size = 32, className }: LogoProps) {

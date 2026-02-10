@@ -89,8 +89,8 @@ export function AudioDemosSection() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="text-center text-sm text-muted-foreground mt-10"
         >
-          All samples generated using AI Music Studio with ElevenLabs and
-          MiniMax models.
+          All samples generated using Songlar with ElevenLabs and MiniMax
+          models.
         </motion.p>
       </div>
     </section>

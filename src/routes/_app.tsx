@@ -1,6 +1,7 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { Music } from 'lucide-react'
 import { getSessionFn } from '../server/auth.fn'
+import { checkOnboardingFn } from '../server/auth.fn'
 import { useSession } from '../lib/auth-client'
 import { AppSidebar } from '../components/app-sidebar'
 import {
@@ -36,11 +37,17 @@ export const Route = createFileRoute('/_app')({
     const user = session.user as AppUser
 
     // Redirect to onboarding if not completed (unless already on onboarding page)
+    // Check directly from DB to bypass session cookie cache
     if (
       !user.onboardingComplete &&
       !location.pathname.includes('/onboarding')
     ) {
-      throw redirect({ to: '/onboarding' })
+      const onboarding = await checkOnboardingFn({
+        data: { userId: user.id },
+      })
+      if (!onboarding.complete) {
+        throw redirect({ to: '/onboarding' })
+      }
     }
 
     return { user }
@@ -67,9 +74,7 @@ function AppLayout() {
             <div className="p-1.5 rounded-lg bg-primary/5">
               <Music className="h-4 w-4 text-primary" />
             </div>
-            <span className="font-semibold tracking-tight">
-              AI Music Studio
-            </span>
+            <span className="font-semibold tracking-tight">Songlar</span>
           </div>
         </header>
 

@@ -71,9 +71,7 @@ function SignupPage() {
       <div className="text-center space-y-4">
         <Link to="/" className="inline-flex items-center gap-2.5 group">
           <Logo size={36} />
-          <span className="text-lg font-bold tracking-tight">
-            AI Music Studio
-          </span>
+          <span className="text-lg font-bold tracking-tight">Songlar</span>
         </Link>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">

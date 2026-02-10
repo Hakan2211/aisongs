@@ -30,10 +30,15 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'AI Music Studio - AI Music Generation',
+        title: 'Songlar - AI Music Generation',
       },
     ],
     links: [
+      {
+        rel: 'icon',
+        type: 'image/svg+xml',
+        href: '/favicon.svg',
+      },
       {
         rel: 'preconnect',
         href: 'https://fonts.googleapis.com',

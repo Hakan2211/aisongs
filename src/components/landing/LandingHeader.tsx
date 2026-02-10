@@ -65,9 +65,7 @@ export function LandingHeader({ isLoggedIn = false }: LandingHeaderProps) {
             className="flex items-center gap-2.5 group cursor-pointer"
           >
             <Logo size={32} />
-            <span className="text-lg font-bold tracking-tight">
-              AI Music Studio
-            </span>
+            <span className="text-lg font-bold tracking-tight">Songlar</span>
           </Link>
 
           {/* Navigation */}

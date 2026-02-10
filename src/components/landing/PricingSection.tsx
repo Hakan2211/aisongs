@@ -58,7 +58,7 @@ export function PricingSection({ isLoggedIn = false }: PricingSectionProps) {
 
             {/* Header */}
             <div className="text-center mb-8 pt-2">
-              <h3 className="text-2xl font-semibold mb-5">AI Music Studio</h3>
+              <h3 className="text-2xl font-semibold mb-5">Songlar</h3>
               <div className="flex items-baseline justify-center gap-2">
                 <span className="text-6xl font-bold tracking-tight">
                   &euro;199

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   ArrowRight,
@@ -66,7 +66,7 @@ function WelcomeStep({ onNext }: { onNext: () => void }) {
       {/* Heading */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight mb-3">
-          Welcome to AI Music Studio
+          Welcome to Songlar
         </h1>
         <p className="text-muted-foreground text-lg leading-relaxed max-w-md mx-auto">
           Let's get you set up so you can start creating AI music.
@@ -115,7 +115,6 @@ function WelcomeStep({ onNext }: { onNext: () => void }) {
  * Step 2: API Keys
  */
 function ApiKeysStep() {
-  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [falKey, setFalKey] = useState('')
   const [minimaxKey, setMinimaxKey] = useState('')
@@ -146,7 +145,9 @@ function ApiKeysStep() {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['session'] })
-      navigate({ to: '/music' })
+      // Hard redirect to bypass Better-Auth's session cookie cache
+      // (navigate() would hit the _app beforeLoad with stale cached session)
+      window.location.href = '/music'
     },
     onError: () => {
       toast.error('Something went wrong. Please try again.')

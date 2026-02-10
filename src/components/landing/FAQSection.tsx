@@ -25,7 +25,7 @@ const faqs = [
   {
     question: 'Do I own the music I generate?',
     answer:
-      'Yes! Music generated through AI Music Studio is yours to use. However, please check the specific terms of the AI model providers (ElevenLabs, MiniMax) for their commercial usage policies, as these may vary.',
+      'Yes! Music generated through Songlar is yours to use. However, please check the specific terms of the AI model providers (ElevenLabs, MiniMax) for their commercial usage policies, as these may vary.',
   },
   {
     question: 'Are my API keys secure?',
@@ -40,12 +40,12 @@ const faqs = [
   {
     question: 'Can I use this commercially?',
     answer:
-      'Yes, you can use AI Music Studio for commercial projects. Just ensure you comply with the terms of service of the underlying AI providers regarding commercial use of generated content.',
+      'Yes, you can use Songlar for commercial projects. Just ensure you comply with the terms of service of the underlying AI providers regarding commercial use of generated content.',
   },
   {
     question: 'How do I get started with fal.ai?',
     answer:
-      'Sign up at fal.ai, navigate to your dashboard to get your API key, then paste it in the Settings page of AI Music Studio. fal.ai provides free credits to new users, so you can start generating immediately.',
+      'Sign up at fal.ai, navigate to your dashboard to get your API key, then paste it in the Settings page of Songlar. fal.ai provides free credits to new users, so you can start generating immediately.',
   },
   {
     question: 'Where is my generated audio stored?',
@@ -70,8 +70,7 @@ export function FAQSection() {
             Frequently asked questions
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Everything you need to know about AI Music Studio and the BYOK
-            model.
+            Everything you need to know about Songlar and the BYOK model.
           </p>
         </motion.div>
 

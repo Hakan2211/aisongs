@@ -38,7 +38,7 @@ export function LandingFooter() {
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
               <Logo size={28} />
-              <span className="text-xl font-bold">AI Music Studio</span>
+              <span className="text-xl font-bold">Songlar</span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-xs">
               Create professional AI music with your own API keys. One-time
@@ -86,8 +86,7 @@ export function LandingFooter() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} AI Music Studio. All rights
-            reserved.
+            &copy; {new Date().getFullYear()} Songlar. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
             Powered by ElevenLabs & MiniMax via fal.ai

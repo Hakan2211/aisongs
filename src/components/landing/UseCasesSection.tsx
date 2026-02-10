@@ -56,7 +56,7 @@ export function UseCasesSection() {
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Whether you're making content, building games, or producing music —
-            AI Music Studio fits your workflow.
+            Songlar fits your workflow.
           </p>
         </motion.div>
 

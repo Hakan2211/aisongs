@@ -125,6 +125,49 @@ export const updateUserRoleFn = createServerFn({ method: 'POST' })
   })
 
 /**
+ * Check onboarding status directly from DB (bypasses session cookie cache).
+ * If the user already has API keys configured, auto-mark them as onboarded
+ * so existing users don't get stuck in the onboarding flow.
+ */
+const checkOnboardingSchema = z.object({
+  userId: z.string(),
+})
+
+export const checkOnboardingFn = createServerFn({ method: 'GET' })
+  .inputValidator(checkOnboardingSchema)
+  .handler(async ({ data }) => {
+    const user = await prisma.user.findUnique({
+      where: { id: data.userId },
+      select: {
+        onboardingComplete: true,
+        falApiKey: true,
+        minimaxApiKey: true,
+      },
+    })
+
+    if (!user) {
+      return { complete: false }
+    }
+
+    // Already marked as complete
+    if (user.onboardingComplete) {
+      return { complete: true }
+    }
+
+    // Auto-complete for existing users who already have API keys
+    const hasKeys = !!(user.falApiKey || user.minimaxApiKey)
+    if (hasKeys) {
+      await prisma.user.update({
+        where: { id: data.userId },
+        data: { onboardingComplete: true },
+      })
+      return { complete: true }
+    }
+
+    return { complete: false }
+  })
+
+/**
  * Complete onboarding — marks user as onboarded
  */
 export const completeOnboardingFn = createServerFn({ method: 'POST' })
