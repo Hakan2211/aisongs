@@ -41,6 +41,11 @@ export const createCheckoutFn = createServerFn({ method: 'POST' })
 export const getPlatformAccessFn = createServerFn({ method: 'GET' })
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
+    // Admins always have platform access
+    if (context.user.role === 'admin') {
+      return { hasPlatformAccess: true, purchaseDate: null }
+    }
+
     const status = await getPlatformAccessStatus(context.user.id)
     return status
   })

@@ -312,11 +312,13 @@ export function WaveformPlayer({
 
 // Lazy version with intersection observer
 export function LazyWaveformPlayer(
-  props: WaveformPlayerProps & { threshold?: number },
+  props: WaveformPlayerProps & { threshold?: number; onLoad?: () => void },
 ) {
-  const { threshold = 0.1, ...playerProps } = props
+  const { threshold = 0.1, onLoad, ...playerProps } = props
   const containerRef = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const onLoadRef = useRef(onLoad)
+  onLoadRef.current = onLoad
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -336,10 +338,24 @@ export function LazyWaveformPlayer(
     return () => observer.disconnect()
   }, [threshold])
 
+  // Combine original onReady with onLoad notification
+  const handleReady = useCallback(
+    (duration: number) => {
+      playerProps.onReady?.(duration)
+      // Notify parent that content has loaded (height may have changed)
+      requestAnimationFrame(() => onLoadRef.current?.())
+    },
+    [playerProps.onReady],
+  )
+
   return (
     <div ref={containerRef}>
       {isVisible ? (
-        <WaveformPlayer {...playerProps} isVisible={isVisible} />
+        <WaveformPlayer
+          {...playerProps}
+          isVisible={isVisible}
+          onReady={handleReady}
+        />
       ) : (
         <div
           className="flex items-center gap-3"

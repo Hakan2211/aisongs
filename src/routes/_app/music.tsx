@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import {
   AlertCircle,
+  Check,
   ChevronDown,
   ChevronUp,
   Download,
@@ -11,7 +12,6 @@ import {
   Key,
   ListMusic,
   Loader2,
-  Lock,
   Mic,
   Music,
   Music2,
@@ -19,6 +19,7 @@ import {
   Sparkles,
   Timer,
   Wand2,
+  Zap,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Track } from '@/components/track-card'
@@ -49,6 +50,13 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { TrackCard, TrackCardSkeleton } from '@/components/track-card'
 import { LazyWaveformPlayer } from '@/components/waveform-player'
 import { Badge } from '@/components/ui/badge'
@@ -106,6 +114,68 @@ const MODELS: Record<
   },
 }
 
+function sanitizeFilename(value: string): string {
+  const cleaned = value
+    .trim()
+    .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '-')
+    .replace(/\s+/g, ' ')
+  return cleaned || 'track'
+}
+
+function getExtensionFromUrl(url: string): string | null {
+  try {
+    const pathname = new URL(url).pathname
+    const lastSegment = pathname.split('/').pop() || ''
+    const extension = lastSegment.split('.').pop()
+    return extension && extension.length <= 5 ? extension.toLowerCase() : null
+  } catch {
+    return null
+  }
+}
+
+function getExtensionFromMime(mime: string): string | null {
+  switch (mime) {
+    case 'audio/mpeg':
+      return 'mp3'
+    case 'audio/wav':
+    case 'audio/x-wav':
+      return 'wav'
+    case 'audio/flac':
+      return 'flac'
+    case 'audio/aac':
+      return 'aac'
+    case 'audio/ogg':
+      return 'ogg'
+    case 'audio/webm':
+      return 'webm'
+    default:
+      return null
+  }
+}
+
+async function downloadAudioToComputer(audioUrl: string, baseName: string) {
+  const response = await fetch(audioUrl)
+  if (!response.ok) {
+    throw new Error(`Download request failed with status ${response.status}`)
+  }
+
+  const blob = await response.blob()
+  const extensionFromMime = getExtensionFromMime(blob.type)
+  const extensionFromUrl = getExtensionFromUrl(audioUrl)
+  const extension = extensionFromMime || extensionFromUrl || 'mp3'
+  const fileName = `${sanitizeFilename(baseName)}.${extension}`
+
+  const objectUrl = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = objectUrl
+  link.download = fileName
+  link.rel = 'noopener'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(objectUrl)
+}
+
 function MusicPage() {
   const queryClient = useQueryClient()
   const trackListRef = useRef<HTMLDivElement>(null)
@@ -140,6 +210,9 @@ function MusicPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [renamingId, setRenamingId] = useState<string | null>(null)
   const [uploadingId, setUploadingId] = useState<string | null>(null)
+
+  // Purchase dialog state
+  const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false)
 
   // Voice conversion dialog state
   const [voiceConversionOpen, setVoiceConversionOpen] = useState(false)
@@ -329,13 +402,60 @@ function MusicPage() {
     return () => clearInterval(interval)
   }, [activeGenerations, queryClient])
 
-  // Virtual list setup - estimateSize includes card height + bottom padding for spacing
+  const measureRafRef = useRef<number | null>(null)
+  const measureTimeoutRef = useRef<number | null>(null)
+
+  // Virtual list setup - use a larger estimate to reduce under-measured starts
+  // before dynamic content (details/conversions/waveforms) is fully measured.
   const virtualizer = useVirtualizer({
     count: generations?.length || 0,
     getScrollElement: () => trackListRef.current,
-    estimateSize: () => 140, // ~100px card + conversions + spacing
+    getItemKey: (index) => generations?.[index]?.id ?? index,
+    estimateSize: () => 260,
     overscan: 5,
+    gap: 12,
   })
+
+  // Callback to force virtualizer re-measurement when card content changes
+  // (e.g. details expanded, waveform loaded, voice conversions added)
+  const handleTrackHeightChange = useCallback(() => {
+    if (measureRafRef.current !== null) {
+      cancelAnimationFrame(measureRafRef.current)
+    }
+    if (measureTimeoutRef.current !== null) {
+      clearTimeout(measureTimeoutRef.current)
+    }
+
+    // Double-rAF waits until post-layout paint settles for async content swaps.
+    measureRafRef.current = requestAnimationFrame(() => {
+      measureRafRef.current = requestAnimationFrame(() => {
+        virtualizer.measure()
+        measureRafRef.current = null
+      })
+    })
+
+    // Fallback measure in case a late async layout update misses the rAF window.
+    measureTimeoutRef.current = window.setTimeout(() => {
+      virtualizer.measure()
+      measureTimeoutRef.current = null
+    }, 80)
+  }, [virtualizer])
+
+  useEffect(() => {
+    return () => {
+      if (measureRafRef.current !== null) {
+        cancelAnimationFrame(measureRafRef.current)
+      }
+      if (measureTimeoutRef.current !== null) {
+        clearTimeout(measureTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  // Re-measure when query results change to keep bottom spacing accurate.
+  useEffect(() => {
+    handleTrackHeightChange()
+  }, [handleTrackHeightChange, generations])
 
   // Generate mutation
   const generateMutation = useMutation({
@@ -483,15 +603,15 @@ function MusicPage() {
   })
 
   // Download handler
-  const handleDownload = useCallback((track: Track) => {
+  const handleDownload = useCallback(async (track: Track) => {
     if (!track.audioUrl) return
-    const link = document.createElement('a')
-    link.href = track.audioUrl
-    link.download = `${track.title || 'track'}.mp3`
-    link.target = '_blank'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    try {
+      await downloadAudioToComputer(track.audioUrl, track.title || 'track')
+      toast.success('Download started')
+    } catch (error) {
+      console.error('Failed to download track:', error)
+      toast.error('Failed to download file')
+    }
   }, [])
 
   const handleGenerate = () => {
@@ -591,7 +711,6 @@ function MusicPage() {
         <Select
           value={provider}
           onValueChange={(v) => setProvider(v as MusicProvider)}
-          disabled={!hasPlatformAccess}
         >
           <SelectTrigger
             className={cn(
@@ -645,7 +764,7 @@ function MusicPage() {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             rows={2}
-            disabled={isGenerating || !hasPlatformAccess}
+            disabled={isGenerating}
             className="resize-none min-h-[72px]"
           />
           {needsPrompt && (
@@ -679,7 +798,7 @@ function MusicPage() {
               onValueChange={([val]) =>
                 setDurationMs(val === 0 ? null : val * 1000)
               }
-              disabled={isGenerating || !hasPlatformAccess}
+              disabled={isGenerating}
             />
           </div>
           <div className="space-y-2">
@@ -691,7 +810,7 @@ function MusicPage() {
               <Switch
                 checked={forceInstrumental}
                 onCheckedChange={setForceInstrumental}
-                disabled={isGenerating || !hasPlatformAccess}
+                disabled={isGenerating}
               />
               <span className="text-xs text-muted-foreground">
                 {forceInstrumental ? 'No vocals' : 'With vocals'}
@@ -721,7 +840,7 @@ Singing our favorite song`}
             value={lyrics}
             onChange={(e) => setLyrics(e.target.value)}
             rows={4}
-            disabled={isGenerating || !hasPlatformAccess}
+            disabled={isGenerating}
             className="resize-none font-mono text-sm"
           />
           <p className="text-[11px] text-muted-foreground">
@@ -740,7 +859,7 @@ Singing our favorite song`}
             <button
               type="button"
               className="flex items-center justify-between w-full py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              disabled={isGenerating || !hasPlatformAccess}
+              disabled={isGenerating}
             >
               <span className="flex items-center gap-2">
                 <Settings2 className="h-4 w-4" />
@@ -763,7 +882,7 @@ Singing our favorite song`}
                 <Select
                   value={sampleRate}
                   onValueChange={(v) => setSampleRate(v as SampleRateOption)}
-                  disabled={isGenerating || !hasPlatformAccess}
+                  disabled={isGenerating}
                 >
                   <SelectTrigger size="sm">
                     <SelectValue />
@@ -781,7 +900,7 @@ Singing our favorite song`}
                 <Select
                   value={bitrate}
                   onValueChange={(v) => setBitrate(v as BitrateOption)}
-                  disabled={isGenerating || !hasPlatformAccess}
+                  disabled={isGenerating}
                 >
                   <SelectTrigger size="sm">
                     <SelectValue />
@@ -799,7 +918,7 @@ Singing our favorite song`}
                 <Select
                   value={audioFormat}
                   onValueChange={(v) => setAudioFormat(v as FormatOption)}
-                  disabled={isGenerating || !hasPlatformAccess}
+                  disabled={isGenerating}
                 >
                   <SelectTrigger size="sm">
                     <SelectValue />
@@ -820,34 +939,40 @@ Singing our favorite song`}
       )}
 
       {/* Generate Button - Full width */}
-      <Button
-        onClick={handleGenerate}
-        disabled={isGenerating || !hasRequiredKey() || !hasPlatformAccess}
-        size="xl"
-        className="w-full"
-      >
-        {!hasPlatformAccess ? (
-          <>
-            <Lock className="h-4 w-4" />
-            Get Access to Generate
-          </>
-        ) : isGenerating ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Generating...
-          </>
-        ) : (
-          <>
-            <Sparkles className="h-4 w-4" />
-            Generate Music
-          </>
-        )}
-      </Button>
+      {!hasPlatformAccess ? (
+        <Button
+          onClick={() => setPurchaseDialogOpen(true)}
+          size="xl"
+          className="w-full"
+        >
+          <Zap className="h-4 w-4" />
+          Unlock Generation
+        </Button>
+      ) : (
+        <Button
+          onClick={handleGenerate}
+          disabled={isGenerating || !hasRequiredKey()}
+          size="xl"
+          className="w-full"
+        >
+          {isGenerating ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Generating...
+            </>
+          ) : (
+            <>
+              <Sparkles className="h-4 w-4" />
+              Generate Music
+            </>
+          )}
+        </Button>
+      )}
     </div>
   )
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)]">
+    <div className="flex flex-col h-[calc(100vh-4rem)] overflow-hidden">
       {/* Header */}
       <div className="shrink-0 py-4 px-1">
         <div className="flex items-center gap-3">
@@ -864,30 +989,6 @@ Singing our favorite song`}
           </div>
         </div>
       </div>
-
-      {/* Platform Access Warning */}
-      {!hasPlatformAccess && platformAccess !== undefined && (
-        <div className="shrink-0 px-1 pb-4">
-          <div className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-200 dark:border-violet-800">
-            <div className="p-3 rounded-xl bg-violet-500/10">
-              <Lock className="h-5 w-5 text-violet-600 dark:text-violet-400" />
-            </div>
-            <div className="flex-1">
-              <p className="font-medium text-violet-900 dark:text-violet-100">
-                Platform Access Required
-              </p>
-              <p className="text-sm text-violet-700 dark:text-violet-300">
-                Purchase platform access to start generating AI music
-              </p>
-            </div>
-            <Link to="/profile">
-              <Button size="lg" className="shadow-lg">
-                Get Access
-              </Button>
-            </Link>
-          </div>
-        </div>
-      )}
 
       {/* API Key Warning */}
       {hasPlatformAccess && !hasRequiredKey() && (
@@ -1003,6 +1104,7 @@ Singing our favorite song`}
         <div
           ref={trackListRef}
           className="flex-1 overflow-auto rounded-2xl border bg-muted/30 mb-4 md:mb-0"
+          style={{ overflowAnchor: 'none' }}
         >
           {loadingGenerations ? (
             <div className="p-4 space-y-3">
@@ -1024,7 +1126,7 @@ Singing our favorite song`}
                   const track = generations[virtualItem.index]
                   return (
                     <div
-                      key={track.id}
+                      key={virtualItem.key}
                       ref={virtualizer.measureElement}
                       data-index={virtualItem.index}
                       style={{
@@ -1034,7 +1136,7 @@ Singing our favorite song`}
                         width: '100%',
                         transform: `translateY(${virtualItem.start}px)`,
                       }}
-                      className="px-4 pb-3"
+                      className="px-4"
                     >
                       <TrackCard
                         track={track}
@@ -1048,6 +1150,7 @@ Singing our favorite song`}
                         onUploadToCdn={(id) => uploadToCdnMutation.mutate(id)}
                         onDownload={handleDownload}
                         onConvertVoice={handleConvertVoice}
+                        onHeightChange={handleTrackHeightChange}
                         isTogglingFavorite={togglingFavoriteId === track.id}
                         isDeleting={deletingId === track.id}
                         isRenaming={renamingId === track.id}
@@ -1059,7 +1162,7 @@ Singing our favorite song`}
                       {/* Nested Voice Conversions */}
                       {track.voiceConversions &&
                         track.voiceConversions.length > 0 && (
-                          <div className="mt-2 ml-4 space-y-2">
+                          <div className="mt-3 ml-4 space-y-3">
                             {track.voiceConversions.map((conversion) => {
                               const isCompleted =
                                 conversion.status === 'completed'
@@ -1112,16 +1215,22 @@ Singing our favorite song`}
                                             variant="ghost"
                                             size="icon-sm"
                                             className="h-7 w-7"
-                                            onClick={() => {
-                                              const link =
-                                                document.createElement('a')
-                                              link.href =
-                                                conversion.outputAudioUrl!
-                                              link.download = `${voiceName}.mp3`
-                                              link.target = '_blank'
-                                              document.body.appendChild(link)
-                                              link.click()
-                                              document.body.removeChild(link)
+                                            onClick={async () => {
+                                              try {
+                                                await downloadAudioToComputer(
+                                                  conversion.outputAudioUrl!,
+                                                  voiceName,
+                                                )
+                                                toast.success('Download started')
+                                              } catch (error) {
+                                                console.error(
+                                                  'Failed to download conversion:',
+                                                  error,
+                                                )
+                                                toast.error(
+                                                  'Failed to download conversion',
+                                                )
+                                              }
                                             }}
                                             title="Download conversion"
                                           >
@@ -1138,6 +1247,7 @@ Singing our favorite song`}
                                       height={32}
                                       compact
                                       threshold={0.1}
+                                      onLoad={handleTrackHeightChange}
                                     />
                                   )}
 
@@ -1165,7 +1275,6 @@ Singing our favorite song`}
                                       {conversion.error}
                                     </div>
                                   )}
-
                                 </div>
                               )
                             })}
@@ -1250,6 +1359,101 @@ Singing our favorite song`}
           sourceTitle={voiceConversionTrackTitle}
         />
       )}
+
+      {/* Purchase Access Dialog */}
+      <PurchaseDialog
+        open={purchaseDialogOpen}
+        onOpenChange={setPurchaseDialogOpen}
+      />
     </div>
+  )
+}
+
+function PurchaseDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
+  const checkoutMutation = useMutation({
+    mutationFn: async () => {
+      const { createCheckoutFn } = await import('@/server/billing.fn')
+      return createCheckoutFn({ data: {} })
+    },
+    onSuccess: (result) => {
+      if (result.url) {
+        window.location.href = result.url
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Failed to start checkout')
+    },
+  })
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-xl">Unlock Songlar</DialogTitle>
+          <DialogDescription>
+            One-time payment for lifetime access to all features.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-4 py-2">
+          {/* Features list */}
+          <ul className="space-y-3">
+            {[
+              'Unlimited AI music generation',
+              'Multiple AI models (ElevenLabs, MiniMax)',
+              'Voice cloning & conversion',
+              'CDN storage for your tracks',
+              'All future updates included',
+            ].map((feature) => (
+              <li key={feature} className="flex items-center gap-3 text-sm">
+                <div className="rounded-full bg-primary/10 p-1">
+                  <Check className="h-3 w-3 text-primary" />
+                </div>
+                {feature}
+              </li>
+            ))}
+          </ul>
+
+          {/* Price */}
+          <div className="rounded-xl border bg-muted/50 p-4 text-center">
+            <div className="text-3xl font-bold tracking-tight">&euro;199</div>
+            <p className="text-sm text-muted-foreground mt-1">
+              One-time payment &middot; Lifetime access
+            </p>
+          </div>
+
+          {/* CTA */}
+          <Button
+            onClick={() => checkoutMutation.mutate()}
+            disabled={checkoutMutation.isPending}
+            size="xl"
+            className="w-full"
+          >
+            {checkoutMutation.isPending ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Redirecting to checkout...
+              </>
+            ) : (
+              <>
+                <Zap className="h-4 w-4" />
+                Purchase Lifetime Access
+              </>
+            )}
+          </Button>
+
+          <p className="text-xs text-center text-muted-foreground">
+            Secure payment via Stripe. You bring your own API keys for AI
+            generation.
+          </p>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }

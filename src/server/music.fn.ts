@@ -146,6 +146,11 @@ function getProviderDisplayName(provider: string): string {
 export const checkPlatformAccessFn = createServerFn({ method: 'GET' })
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
+    // Admins always have platform access
+    if (context.user.role === 'admin') {
+      return { hasAccess: true, mock: false }
+    }
+
     const mockPayments = process.env.MOCK_PAYMENTS === 'true'
     if (mockPayments) {
       return { hasAccess: true, mock: true }
@@ -166,9 +171,10 @@ export const generateMusicFn = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
   .inputValidator(generateMusicSchema)
   .handler(async ({ data, context }) => {
-    // Check platform access (skip in mock payment mode)
+    // Check platform access (admins bypass, skip in mock payment mode)
+    const isAdmin = context.user.role === 'admin'
     const mockPayments = process.env.MOCK_PAYMENTS === 'true'
-    if (!mockPayments) {
+    if (!isAdmin && !mockPayments) {
       const user = await prisma.user.findUnique({
         where: { id: context.user.id },
         select: { hasPlatformAccess: true },

@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import {
-  ChevronDown,
   Cloud,
   CloudOff,
   Download,
@@ -59,6 +58,7 @@ interface TrackCardProps {
   onUploadToCdn: (trackId: string) => void
   onDownload: (track: Track) => void
   onConvertVoice?: (trackId: string, trackTitle: string) => void
+  onHeightChange?: () => void
   isTogglingFavorite?: boolean
   isDeleting?: boolean
   isRenaming?: boolean
@@ -104,6 +104,7 @@ export function TrackCard({
   onUploadToCdn,
   onDownload,
   onConvertVoice,
+  onHeightChange,
   isTogglingFavorite = false,
   isDeleting = false,
   isRenaming = false,
@@ -114,7 +115,7 @@ export function TrackCard({
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false)
   const [newTitle, setNewTitle] = useState(track.title || '')
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const [showDetails, setShowDetails] = useState(false)
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false)
 
   const displayTitle =
     track.title || track.prompt.slice(0, 50) || 'Untitled Track'
@@ -290,50 +291,21 @@ export function TrackCard({
             height={40}
             compact
             threshold={0.1}
+            onLoad={onHeightChange}
           />
         )}
 
-        {/* Details Toggle & Content */}
+        {/* Details Modal Trigger */}
         {isCompleted && (track.prompt || track.lyrics) && (
-          <>
-            <button
-              type="button"
-              onClick={() => setShowDetails(!showDetails)}
-              className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors py-0.5"
-            >
-              <ChevronDown
-                className={cn(
-                  'h-3 w-3 transition-transform duration-200',
-                  showDetails && 'rotate-180',
-                )}
-              />
-              {showDetails ? 'Hide details' : 'Show details'}
-            </button>
-            {showDetails && (
-              <div className="space-y-2 text-xs border-t pt-2">
-                {track.prompt && (
-                  <div>
-                    <span className="font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
-                      Style
-                    </span>
-                    <p className="mt-0.5 text-foreground/80 leading-relaxed">
-                      {track.prompt}
-                    </p>
-                  </div>
-                )}
-                {track.lyrics && (
-                  <div>
-                    <span className="font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
-                      Lyrics
-                    </span>
-                    <p className="mt-0.5 text-foreground/80 whitespace-pre-line leading-relaxed max-h-40 overflow-y-auto">
-                      {track.lyrics}
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-          </>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsDetailsDialogOpen(true)}
+            className="h-7 w-fit px-2 text-xs text-muted-foreground hover:text-foreground"
+          >
+            Show details
+          </Button>
         )}
 
         {/* Status for non-completed tracks */}
@@ -356,6 +328,41 @@ export function TrackCard({
           </div>
         )}
       </div>
+
+      {/* Details Dialog */}
+      <Dialog open={isDetailsDialogOpen} onOpenChange={setIsDetailsDialogOpen}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{displayTitle}</DialogTitle>
+            <DialogDescription>
+              Track details and generated lyrics
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+            {track.prompt && (
+              <div>
+                <span className="font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
+                  Style
+                </span>
+                <p className="mt-1 text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">
+                  {track.prompt}
+                </p>
+              </div>
+            )}
+            {track.lyrics && (
+              <div>
+                <span className="font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
+                  Lyrics
+                </span>
+                <p className="mt-1 text-sm text-foreground/90 whitespace-pre-wrap leading-relaxed">
+                  {track.lyrics}
+                </p>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Rename Dialog */}
       <Dialog open={isRenameDialogOpen} onOpenChange={setIsRenameDialogOpen}>

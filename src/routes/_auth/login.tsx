@@ -163,6 +163,7 @@ function LoginPage() {
           </Button>
         </form>
 
+        {/* Google OAuth — commented out until configured
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -201,6 +202,7 @@ function LoginPage() {
             Google
           </Button>
         </div>
+        */}
       </div>
 
       <p className="text-center text-sm text-muted-foreground">

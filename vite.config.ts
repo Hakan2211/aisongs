@@ -19,6 +19,9 @@ const config = defineConfig({
     nitroV2Plugin(),
     viteReact(),
   ],
+  server: {
+    allowedHosts: true,
+  },
   build: {
     rollupOptions: {
       external: ['@prisma/client/runtime/library', 'better-sqlite3'],
