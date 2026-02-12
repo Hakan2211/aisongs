@@ -66,8 +66,7 @@ export function CTASection({ isLoggedIn = false }: CTASectionProps) {
             <a href="#pricing">
               <Button
                 size="lg"
-                variant="outline"
-                className="min-w-[200px] h-12 text-base border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+                className="min-w-[200px] h-12 text-base bg-transparent border border-primary-foreground/30 text-primary-foreground shadow-sm hover:bg-primary-foreground hover:text-primary"
               >
                 View Pricing
               </Button>
