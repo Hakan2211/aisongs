@@ -91,7 +91,7 @@ export function LandingFooter() {
               href="https://hakanda.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors"
+              className="text-amber-500 hover:text-amber-400 transition-colors"
             >
               hakanda.com
             </a>

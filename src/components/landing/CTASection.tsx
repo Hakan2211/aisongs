@@ -67,7 +67,7 @@ export function CTASection({ isLoggedIn = false }: CTASectionProps) {
               <Button
                 size="lg"
                 variant="outline"
-                className="min-w-[200px] h-12 text-base"
+                className="min-w-[200px] h-12 text-base border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground hover:text-primary"
               >
                 View Pricing
               </Button>
