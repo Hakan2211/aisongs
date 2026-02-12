@@ -137,8 +137,9 @@ export function PricingSection({ isLoggedIn = false }: PricingSectionProps) {
             <div className="p-5 rounded-xl bg-card border">
               <div className="font-semibold mb-2">3. Pay-as-you-go</div>
               <p className="text-muted-foreground leading-relaxed">
-                Only pay for what you use. Typical track costs $0.01-0.05
-                depending on length.
+                Only pay for what you generate. Costs vary by
+                provider&mdash;e.g. ~$0.05/track on MiniMax, or ~$0.80/min on
+                ElevenLabs.
               </p>
             </div>
           </div>

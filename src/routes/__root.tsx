@@ -32,6 +32,31 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       {
         title: 'Songlar - AI Music Generation',
       },
+      {
+        name: 'description',
+        content:
+          'Create music with AI using ElevenLabs and MiniMax models. Generate songs, beats, and instrumentals in seconds.',
+      },
+      // Open Graph
+      { property: 'og:type', content: 'website' },
+      { property: 'og:title', content: 'Songlar - AI Music Generation' },
+      {
+        property: 'og:description',
+        content:
+          'Create music with AI using ElevenLabs and MiniMax models. Generate songs, beats, and instrumentals in seconds.',
+      },
+      { property: 'og:image', content: 'https://songlar.com/og-image.png' },
+      { property: 'og:url', content: 'https://songlar.com' },
+      { property: 'og:site_name', content: 'Songlar' },
+      // Twitter Card
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: 'Songlar - AI Music Generation' },
+      {
+        name: 'twitter:description',
+        content:
+          'Create music with AI using ElevenLabs and MiniMax models. Generate songs, beats, and instrumentals in seconds.',
+      },
+      { name: 'twitter:image', content: 'https://songlar.com/og-image.png' },
     ],
     links: [
       {

@@ -16,7 +16,9 @@
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
     "db:deploy": "dotenv -e .env.local -- prisma migrate deploy",
     "db:studio": "dotenv -e .env.local -- prisma studio",
-    "db:seed": "dotenv -e .env.local -- prisma db seed"
+    "db:seed": "dotenv -e .env.local -- prisma db seed",
+    "generate-demos": "dotenv -e .env.local -- node scripts/generate-demos.mjs",
+    "generate-og": "node scripts/generate-og-image.mjs"
   },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
@@ -76,6 +78,7 @@
     "zod": "^4.1.11"
   },
   "devDependencies": {
+    "@napi-rs/canvas": "^0.1.92",
     "@tanstack/devtools-vite": "^0.3.11",
     "@tanstack/eslint-config": "^0.3.0",
     "@testing-library/dom": "^10.4.0",

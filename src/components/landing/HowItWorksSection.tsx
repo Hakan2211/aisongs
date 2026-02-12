@@ -81,14 +81,14 @@ function StepCard({
         <div className="hidden md:block absolute top-12 left-[calc(50%+40px)] w-[calc(100%-80px)] h-0.5 bg-border" />
       )}
 
-      {/* Step number */}
-      <div className="relative z-10 mb-6">
-        <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-muted border-4 border-background shadow-lg">
+      {/* Step icon + number badge */}
+      <div className="z-10 mb-6">
+        <div className="relative inline-flex items-center justify-center w-24 h-24 rounded-full bg-muted border-4 border-background shadow-lg">
           <Icon className="h-10 w-10 text-primary" />
+          <span className="absolute -top-2 -right-2 flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold">
+            {step.step}
+          </span>
         </div>
-        <span className="absolute -top-2 -right-2 flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold">
-          {step.step}
-        </span>
       </div>
 
       {/* Content */}

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Play, Pause, Music2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -8,42 +8,42 @@ interface DemoTrack {
   style: string
   model: string
   duration: string
+  src: string
 }
 
 /**
  * Audio Demos Section
  *
- * Showcases what AI-generated music sounds like.
- * Uses placeholder demo cards (no actual audio files yet — these can be
- * swapped for real samples later by adding `src` to DemoTrack and wiring
- * up the <audio> element).
+ * Showcases real AI-generated music samples on the landing page.
+ * Each card plays an MP3 from public/audio/ using HTML5 <audio>.
+ * Only one track plays at a time (previous track pauses when a new one starts).
  */
 const demoTracks: DemoTrack[] = [
   {
-    title: 'Neon Dreams',
-    style: 'Synthwave / Electronic',
+    title: 'New Habits',
+    style: 'Indie Pop / Acoustic',
     model: 'ElevenLabs',
-    duration: '0:32',
+    duration: '0:30',
+    src: '/audio/demo-new-habits.mp3',
   },
   {
     title: 'Golden Hour',
     style: 'Lo-fi / Chill',
     model: 'MiniMax',
-    duration: '0:28',
+    duration: '0:34',
+    src: '/audio/demo-golden-hour.mp3',
   },
   {
     title: 'Rise Above',
-    style: 'Cinematic / Orchestral',
-    model: 'ElevenLabs',
-    duration: '0:35',
-  },
-  {
-    title: 'Street Lights',
-    style: 'Hip-Hop / Beat',
+    style: 'Cinematic / Inspirational',
     model: 'MiniMax',
-    duration: '0:30',
+    duration: '1:06',
+    src: '/audio/demo-rise-above.mp3',
   },
 ]
+
+// Custom event to coordinate playback across cards — only one plays at a time
+const PAUSE_ALL_EVENT = 'demo-pause-all'
 
 export function AudioDemosSection() {
   return (
@@ -67,7 +67,7 @@ export function AudioDemosSection() {
         </motion.div>
 
         {/* Demo Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-4xl mx-auto">
           {demoTracks.map((track, index) => (
             <motion.div
               key={track.title}
@@ -99,27 +99,106 @@ export function AudioDemosSection() {
 
 function DemoCard({ track }: { track: DemoTrack }) {
   const [isPlaying, setIsPlaying] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [displayDuration, setDisplayDuration] = useState(track.duration)
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const instanceId = useRef(Math.random().toString(36).slice(2))
+
+  // Listen for the "pause all" event from other cards
+  useEffect(() => {
+    function handlePauseAll(e: Event) {
+      const detail = (e as CustomEvent).detail
+      if (detail !== instanceId.current && audioRef.current) {
+        audioRef.current.pause()
+        setIsPlaying(false)
+      }
+    }
+
+    window.addEventListener(PAUSE_ALL_EVENT, handlePauseAll)
+    return () => window.removeEventListener(PAUSE_ALL_EVENT, handlePauseAll)
+  }, [])
+
+  // When the audio metadata loads, update the displayed duration
+  const handleLoadedMetadata = useCallback(() => {
+    const audio = audioRef.current
+    if (audio && isFinite(audio.duration)) {
+      const mins = Math.floor(audio.duration / 60)
+      const secs = Math.floor(audio.duration % 60)
+      setDisplayDuration(`${mins}:${secs.toString().padStart(2, '0')}`)
+    }
+  }, [])
+
+  const togglePlay = useCallback(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    if (isPlaying) {
+      audio.pause()
+      setIsPlaying(false)
+    } else {
+      // Pause all other playing cards first
+      window.dispatchEvent(
+        new CustomEvent(PAUSE_ALL_EVENT, { detail: instanceId.current }),
+      )
+      audio.play().catch(() => {
+        // Autoplay may be blocked — silently ignore
+      })
+      setIsPlaying(true)
+    }
+  }, [isPlaying])
+
+  const handleTimeUpdate = useCallback(() => {
+    const audio = audioRef.current
+    if (audio && audio.duration) {
+      setProgress((audio.currentTime / audio.duration) * 100)
+    }
+  }, [])
+
+  const handleEnded = useCallback(() => {
+    setIsPlaying(false)
+    setProgress(0)
+  }, [])
 
   return (
     <div className="group relative rounded-xl border bg-card p-5 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
-      {/* Waveform Visualization (decorative) */}
+      {/* Hidden audio element */}
+      <audio
+        ref={audioRef}
+        src={track.src}
+        preload="metadata"
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleEnded}
+        onLoadedMetadata={handleLoadedMetadata}
+      />
+
+      {/* Waveform Visualization */}
       <div className="relative mb-4 h-20 flex items-center justify-center rounded-lg bg-muted/50 overflow-hidden">
+        {/* Progress background fill */}
+        <div
+          className="absolute inset-0 bg-primary/10 transition-all duration-150 ease-linear origin-left"
+          style={{ width: `${progress}%` }}
+        />
+
         {/* Decorative waveform bars */}
-        <div className="flex items-center gap-[3px] h-12">
+        <div className="relative flex items-center gap-[3px] h-12">
           {Array.from({ length: 24 }).map((_, i) => {
             const height = Math.sin((i / 24) * Math.PI) * 0.7 + 0.3
+            const barProgress = (i / 24) * 100
+            const isPastPlayhead = barProgress < progress
+
             return (
               <div
                 key={i}
                 className={cn(
                   'w-[3px] rounded-full transition-all duration-300',
-                  isPlaying
-                    ? 'bg-primary animate-pulse'
-                    : 'bg-primary/30 group-hover:bg-primary/50',
+                  isPlaying && isPastPlayhead
+                    ? 'bg-primary'
+                    : isPlaying
+                      ? 'bg-primary/40'
+                      : 'bg-primary/30 group-hover:bg-primary/50',
                 )}
                 style={{
                   height: `${height * 100}%`,
-                  animationDelay: isPlaying ? `${i * 50}ms` : undefined,
                 }}
               />
             )
@@ -128,7 +207,7 @@ function DemoCard({ track }: { track: DemoTrack }) {
 
         {/* Play/Pause overlay */}
         <button
-          onClick={() => setIsPlaying(!isPlaying)}
+          onClick={togglePlay}
           className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-background/50 backdrop-blur-sm cursor-pointer"
         >
           <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground shadow-lg">
@@ -146,7 +225,7 @@ function DemoCard({ track }: { track: DemoTrack }) {
         <div className="flex items-center justify-between">
           <h4 className="font-semibold text-sm">{track.title}</h4>
           <span className="text-xs text-muted-foreground font-mono">
-            {track.duration}
+            {displayDuration}
           </span>
         </div>
         <p className="text-xs text-muted-foreground">{track.style}</p>
