@@ -36,7 +36,7 @@ interface ConvertWithCloneDialogProps {
 interface Generation {
   id: string
   title: string | null
-  prompt: string
+  prompt: string | null
   audioUrl: string | null
   audioDurationMs: number | null
   createdAt: Date
@@ -152,7 +152,9 @@ export function ConvertWithCloneDialog({
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">
-                        {gen.title || gen.prompt.slice(0, 50)}
+                        {gen.title ||
+                          gen.prompt?.slice(0, 50) ||
+                          'Untitled Track'}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {formatDate(gen.createdAt)}

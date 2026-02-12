@@ -40,7 +40,8 @@ export interface Track {
   id: string
   title: string | null
   provider: string
-  prompt: string
+  source?: string | null
+  prompt: string | null
   lyrics?: string | null
   status: string
   audioUrl: string | null
@@ -75,6 +76,8 @@ function getProviderDisplayName(provider: string): string {
       return 'MiniMax v2'
     case 'minimax-v2.5':
       return 'MiniMax v2.5'
+    case 'upload':
+      return 'Uploaded'
     default:
       return provider
   }
@@ -118,7 +121,7 @@ export function TrackCard({
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false)
 
   const displayTitle =
-    track.title || track.prompt.slice(0, 50) || 'Untitled Track'
+    track.title || track.prompt?.slice(0, 50) || 'Untitled Track'
   const isCompleted = track.status === 'completed' && track.audioUrl
 
   const handleRename = () => {
@@ -160,7 +163,17 @@ export function TrackCard({
               {displayTitle}
             </h3>
             <div className="flex items-center gap-2 mt-1 flex-wrap">
-              <Badge variant="outline" className="text-[10px]">
+              <Badge
+                variant={track.provider === 'upload' ? 'secondary' : 'outline'}
+                className={cn(
+                  'text-[10px]',
+                  track.provider === 'upload' &&
+                    'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800',
+                )}
+              >
+                {track.provider === 'upload' && (
+                  <Upload className="h-2.5 w-2.5 mr-0.5" />
+                )}
                 {getProviderDisplayName(track.provider)}
               </Badge>
               <span className="text-xs text-muted-foreground">

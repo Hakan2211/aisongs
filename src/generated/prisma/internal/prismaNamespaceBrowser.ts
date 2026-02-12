@@ -173,6 +173,7 @@ export type SubscriptionEventScalarFieldEnum = (typeof SubscriptionEventScalarFi
 export const MusicGenerationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  source: 'source',
   provider: 'provider',
   model: 'model',
   prompt: 'prompt',

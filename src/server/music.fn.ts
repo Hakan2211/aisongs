@@ -29,6 +29,7 @@ import {
   deleteAudioFromBunny,
   getAudioFilename,
   uploadAudioToBunny,
+  uploadAudioBufferToBunny,
 } from './services/bunny.service'
 import type { MusicProvider } from './services/music.service'
 import type { BunnySettings } from './services/bunny.service'
@@ -68,6 +69,31 @@ const listGenerationsSchema = z.object({
   limit: z.number().min(1).max(100).optional(),
   offset: z.number().min(0).optional(),
 })
+
+const uploadTrackSchema = z.object({
+  audioBase64: z.string().min(1, 'Audio data is required'),
+  filename: z.string().min(1, 'Filename is required'),
+  contentType: z
+    .string()
+    .refine(
+      (ct) =>
+        [
+          'audio/mpeg',
+          'audio/wav',
+          'audio/x-wav',
+          'audio/flac',
+          'audio/ogg',
+          'audio/aac',
+          'audio/webm',
+          'audio/mp4',
+        ].includes(ct),
+      { message: 'Unsupported audio format' },
+    ),
+  title: z.string().max(200).optional(),
+})
+
+// Max upload size: 50MB (before base64 encoding)
+const MAX_UPLOAD_BYTES = 50 * 1024 * 1024
 
 // ============================================================================
 // Helper Functions
@@ -869,5 +895,152 @@ export const uploadToCdnFn = createServerFn({ method: 'POST' })
     return {
       success: true,
       cdnUrl: uploadResult.cdnUrl,
+    }
+  })
+
+// ============================================================================
+// Track Upload
+// ============================================================================
+
+/**
+ * Upload a user's own audio file as a track.
+ *
+ * Accepts base64-encoded audio, uploads to Bunny CDN, and creates a
+ * MusicGeneration record with source="uploaded" so it appears alongside
+ * AI-generated tracks with all the same actions (favorite, rename, delete,
+ * download, voice conversion).
+ */
+export const uploadTrackFn = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
+  .inputValidator(uploadTrackSchema)
+  .handler(async ({ data, context }) => {
+    // Check platform access
+    const isAdmin = context.user.role === 'admin'
+    const mockPayments = process.env.MOCK_PAYMENTS === 'true'
+    if (!isAdmin && !mockPayments) {
+      const user = await prisma.user.findUnique({
+        where: { id: context.user.id },
+        select: { hasPlatformAccess: true },
+      })
+
+      if (!user?.hasPlatformAccess) {
+        throw new Error(
+          'Platform access required. Please purchase access to upload tracks.',
+        )
+      }
+    }
+
+    // Decode base64 to buffer
+    const audioBuffer = Buffer.from(data.audioBase64, 'base64')
+
+    if (audioBuffer.byteLength === 0) {
+      throw new Error('Audio data is empty')
+    }
+
+    if (audioBuffer.byteLength > MAX_UPLOAD_BYTES) {
+      throw new Error(
+        `File too large. Maximum upload size is ${MAX_UPLOAD_BYTES / (1024 * 1024)}MB.`,
+      )
+    }
+
+    // Require Bunny CDN settings for upload storage
+    const bunnySettings = await getUserBunnySettings(context.user.id)
+    if (!bunnySettings) {
+      throw new Error(
+        'Bunny CDN settings are required to upload tracks. Please configure CDN in Settings.',
+      )
+    }
+
+    // Determine file extension from content type
+    const extMap: Record<string, string> = {
+      'audio/mpeg': 'mp3',
+      'audio/wav': 'wav',
+      'audio/x-wav': 'wav',
+      'audio/flac': 'flac',
+      'audio/ogg': 'ogg',
+      'audio/aac': 'aac',
+      'audio/webm': 'webm',
+      'audio/mp4': 'm4a',
+    }
+    const ext = extMap[data.contentType] || 'mp3'
+
+    // Create database record first (so we have an ID for the filename)
+    const generation = await prisma.musicGeneration.create({
+      data: {
+        userId: context.user.id,
+        source: 'uploaded',
+        provider: 'upload',
+        prompt: null,
+        status: 'processing',
+        title:
+          data.title ||
+          data.filename.replace(/\.[^.]+$/, '') ||
+          'Uploaded Track',
+      },
+    })
+
+    try {
+      // Upload to Bunny CDN
+      const filename = `${generation.id}.${ext}`
+      const uploadResult = await uploadAudioBufferToBunny(
+        bunnySettings,
+        audioBuffer.buffer.slice(
+          audioBuffer.byteOffset,
+          audioBuffer.byteOffset + audioBuffer.byteLength,
+        ),
+        filename,
+        data.contentType,
+      )
+
+      if (!uploadResult.success) {
+        // Clean up the database record on failure
+        await prisma.musicGeneration.update({
+          where: { id: generation.id },
+          data: {
+            status: 'failed',
+            error: uploadResult.error || 'CDN upload failed',
+          },
+        })
+        throw new Error(uploadResult.error || 'Failed to upload audio to CDN')
+      }
+
+      // Update record with CDN URL and mark as completed
+      const updated = await prisma.musicGeneration.update({
+        where: { id: generation.id },
+        data: {
+          audioUrl: uploadResult.cdnUrl,
+          audioStored: true,
+          status: 'completed',
+          progress: 100,
+        },
+      })
+
+      return {
+        id: updated.id,
+        status: 'completed' as const,
+        audioUrl: updated.audioUrl,
+        title: updated.title,
+      }
+    } catch (error) {
+      // If we haven't already set the status to failed, do it now
+      const current = await prisma.musicGeneration.findUnique({
+        where: { id: generation.id },
+        select: { status: true },
+      })
+
+      if (current && current.status !== 'failed') {
+        await prisma.musicGeneration.update({
+          where: { id: generation.id },
+          data: {
+            status: 'failed',
+            error:
+              error instanceof Error
+                ? error.message
+                : 'Upload failed unexpectedly',
+          },
+        })
+      }
+
+      throw error
     }
   })

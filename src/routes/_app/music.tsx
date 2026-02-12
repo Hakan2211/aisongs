@@ -8,6 +8,7 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
+  FileAudio,
   Heart,
   Key,
   ListMusic,
@@ -18,7 +19,9 @@ import {
   Settings2,
   Sparkles,
   Timer,
+  Upload,
   Wand2,
+  X,
   Zap,
 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -57,6 +60,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
 import { TrackCard, TrackCardSkeleton } from '@/components/track-card'
 import { LazyWaveformPlayer } from '@/components/waveform-player'
 import { Badge } from '@/components/ui/badge'
@@ -213,6 +217,9 @@ function MusicPage() {
 
   // Purchase dialog state
   const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false)
+
+  // Upload dialog state
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
 
   // Voice conversion dialog state
   const [voiceConversionOpen, setVoiceConversionOpen] = useState(false)
@@ -938,7 +945,7 @@ Singing our favorite song`}
         </Collapsible>
       )}
 
-      {/* Generate Button - Full width */}
+      {/* Action Buttons */}
       {!hasPlatformAccess ? (
         <Button
           onClick={() => setPurchaseDialogOpen(true)}
@@ -949,24 +956,43 @@ Singing our favorite song`}
           Unlock Generation
         </Button>
       ) : (
-        <Button
-          onClick={handleGenerate}
-          disabled={isGenerating || !hasRequiredKey()}
-          size="xl"
-          className="w-full"
-        >
-          {isGenerating ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Generating...
-            </>
-          ) : (
-            <>
-              <Sparkles className="h-4 w-4" />
-              Generate Music
-            </>
-          )}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={handleGenerate}
+            disabled={isGenerating || !hasRequiredKey()}
+            size="xl"
+            className="flex-1"
+          >
+            {isGenerating ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Sparkles className="h-4 w-4" />
+                Generate Music
+              </>
+            )}
+          </Button>
+          <Button
+            variant="outline"
+            size="xl"
+            onClick={() => {
+              if (!hasBunnySettings) {
+                toast.error(
+                  'Bunny CDN settings are required to upload tracks. Configure CDN in Settings.',
+                )
+                return
+              }
+              setUploadDialogOpen(true)
+            }}
+            title="Upload your own track"
+          >
+            <Upload className="h-4 w-4" />
+            <span className="hidden lg:inline">Upload</span>
+          </Button>
+        </div>
       )}
     </div>
   )
@@ -1032,7 +1058,7 @@ Singing our favorite song`}
                     className="flex items-center justify-between text-sm"
                   >
                     <span className="text-blue-700 dark:text-blue-300 truncate flex-1">
-                      {gen.title || gen.prompt.slice(0, 40)}...
+                      {gen.title || gen.prompt?.slice(0, 40) || 'Untitled'}...
                     </span>
                     <span className="text-blue-600 dark:text-blue-400 font-medium tabular-nums ml-3">
                       {gen.progress || 0}%
@@ -1221,7 +1247,9 @@ Singing our favorite song`}
                                                   conversion.outputAudioUrl!,
                                                   voiceName,
                                                 )
-                                                toast.success('Download started')
+                                                toast.success(
+                                                  'Download started',
+                                                )
                                               } catch (error) {
                                                 console.error(
                                                   'Failed to download conversion:',
@@ -1298,7 +1326,7 @@ Singing our favorite song`}
               <p className="text-sm text-muted-foreground max-w-sm">
                 {filterTab === 'favorites'
                   ? 'Heart your favorite tracks to see them here'
-                  : 'Use the form below to create your first AI-generated track'}
+                  : 'Generate your first AI track or upload your own audio below'}
               </p>
             </div>
           )}
@@ -1364,6 +1392,15 @@ Singing our favorite song`}
       <PurchaseDialog
         open={purchaseDialogOpen}
         onOpenChange={setPurchaseDialogOpen}
+      />
+
+      {/* Upload Track Dialog */}
+      <UploadTrackDialog
+        open={uploadDialogOpen}
+        onOpenChange={setUploadDialogOpen}
+        onSuccess={() => {
+          queryClient.invalidateQueries({ queryKey: ['generations'] })
+        }}
       />
     </div>
   )
@@ -1452,6 +1489,253 @@ function PurchaseDialog({
             Secure payment via Stripe. You bring your own API keys for AI
             generation.
           </p>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+const ACCEPTED_AUDIO_TYPES = [
+  'audio/mpeg',
+  'audio/wav',
+  'audio/x-wav',
+  'audio/flac',
+  'audio/ogg',
+  'audio/aac',
+  'audio/webm',
+  'audio/mp4',
+]
+
+const MAX_FILE_SIZE_MB = 50
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
+
+function UploadTrackDialog({
+  open,
+  onOpenChange,
+  onSuccess,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onSuccess: () => void
+}) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [title, setTitle] = useState('')
+  const [dragActive, setDragActive] = useState(false)
+
+  const uploadMutation = useMutation({
+    mutationFn: async () => {
+      if (!selectedFile) throw new Error('No file selected')
+
+      // Read file as base64
+      const arrayBuffer = await selectedFile.arrayBuffer()
+      const uint8Array = new Uint8Array(arrayBuffer)
+
+      // Convert to base64 in chunks to avoid call stack limits
+      const chunkSize = 8192
+      let binary = ''
+      for (let i = 0; i < uint8Array.length; i += chunkSize) {
+        const chunk = uint8Array.subarray(i, i + chunkSize)
+        binary += String.fromCharCode(...chunk)
+      }
+      const base64 = btoa(binary)
+
+      const { uploadTrackFn } = await import('@/server/music.fn')
+      return uploadTrackFn({
+        data: {
+          audioBase64: base64,
+          filename: selectedFile.name,
+          contentType: selectedFile.type || 'audio/mpeg',
+          title: title.trim() || undefined,
+        },
+      })
+    },
+    onSuccess: (result) => {
+      toast.success(`"${result.title || 'Track'}" uploaded successfully!`)
+      onSuccess()
+      handleClose()
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Failed to upload track')
+    },
+  })
+
+  const handleClose = () => {
+    if (uploadMutation.isPending) return
+    setSelectedFile(null)
+    setTitle('')
+    setDragActive(false)
+    onOpenChange(false)
+  }
+
+  const validateAndSetFile = (file: File) => {
+    if (!ACCEPTED_AUDIO_TYPES.includes(file.type)) {
+      toast.error(
+        'Unsupported file format. Please upload MP3, WAV, FLAC, OGG, AAC, or WebM.',
+      )
+      return
+    }
+
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      toast.error(`File too large. Maximum size is ${MAX_FILE_SIZE_MB}MB.`)
+      return
+    }
+
+    setSelectedFile(file)
+    // Auto-fill title from filename (without extension)
+    if (!title) {
+      setTitle(file.name.replace(/\.[^.]+$/, ''))
+    }
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) validateAndSetFile(file)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setDragActive(false)
+    const file = e.dataTransfer.files?.[0]
+    if (file) validateAndSetFile(file)
+  }
+
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true)
+    } else if (e.type === 'dragleave') {
+      setDragActive(false)
+    }
+  }
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Upload className="h-5 w-5 text-primary" />
+            Upload Track
+          </DialogTitle>
+          <DialogDescription>
+            Upload your own audio file. It will be stored on your Bunny CDN and
+            available for voice conversion.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-4 py-2">
+          {/* Drop Zone / File Input */}
+          <div
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+            onClick={() => fileInputRef.current?.click()}
+            className={cn(
+              'relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 cursor-pointer transition-colors',
+              dragActive
+                ? 'border-primary bg-primary/5'
+                : selectedFile
+                  ? 'border-green-500/50 bg-green-500/5'
+                  : 'border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/50',
+            )}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="audio/*"
+              onChange={handleFileChange}
+              className="hidden"
+              disabled={uploadMutation.isPending}
+            />
+
+            {selectedFile ? (
+              <div className="flex flex-col items-center gap-2 text-center">
+                <div className="rounded-full bg-green-500/10 p-3">
+                  <FileAudio className="h-6 w-6 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium truncate max-w-[280px]">
+                    {selectedFile.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {formatFileSize(selectedFile.size)}
+                  </p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs text-muted-foreground"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setSelectedFile(null)
+                    setTitle('')
+                    if (fileInputRef.current) fileInputRef.current.value = ''
+                  }}
+                  disabled={uploadMutation.isPending}
+                >
+                  <X className="h-3 w-3 mr-1" />
+                  Remove
+                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-2 text-center">
+                <div className="rounded-full bg-muted p-3">
+                  <Upload className="h-6 w-6 text-muted-foreground" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">
+                    Drop audio file here or click to browse
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    MP3, WAV, FLAC, OGG, AAC, WebM &middot; Max{' '}
+                    {MAX_FILE_SIZE_MB}MB
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Title Input */}
+          {selectedFile && (
+            <div className="space-y-1.5">
+              <Label className="text-sm">Track Title</Label>
+              <Input
+                placeholder="Enter a title for this track"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                maxLength={200}
+                disabled={uploadMutation.isPending}
+              />
+            </div>
+          )}
+
+          {/* Upload Button */}
+          <Button
+            onClick={() => uploadMutation.mutate()}
+            disabled={!selectedFile || uploadMutation.isPending}
+            size="xl"
+            className="w-full"
+          >
+            {uploadMutation.isPending ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              <>
+                <Upload className="h-4 w-4" />
+                Upload Track
+              </>
+            )}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

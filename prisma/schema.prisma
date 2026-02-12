@@ -176,12 +176,13 @@ model MusicGeneration {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Provider info
-  provider String // "elevenlabs", "minimax-v2", "minimax-v2.5"
+  // Source and provider info
+  source   String @default("generated") // "generated" or "uploaded"
+  provider String // "elevenlabs", "minimax-v2", "minimax-v2.5", "upload"
   model    String? // Specific model variant if applicable
 
   // Input parameters
-  prompt       String  // Style/mood description
+  prompt       String? // Style/mood description (null for uploaded tracks)
   lyrics       String? // For MiniMax models (with [verse], [chorus] tags)
   durationMs   Int?    // Requested duration in milliseconds
   outputFormat String? // "mp3_44100_128", etc.
@@ -219,6 +220,7 @@ model MusicGeneration {
   @@index([userId])
   @@index([status])
   @@index([provider])
+  @@index([source])
   @@index([createdAt])
   @@map("music_generation")
 }

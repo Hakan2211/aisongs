@@ -863,7 +863,7 @@ interface ConversionCardProps {
     sourceGeneration: {
       id: string
       title: string | null
-      prompt: string
+      prompt: string | null
       lyrics: string | null
       audioDurationMs: number | null
     } | null
@@ -1029,7 +1029,6 @@ function ConversionCard({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
     </>
   )
 }

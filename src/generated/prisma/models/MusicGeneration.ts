@@ -41,6 +41,7 @@ export type MusicGenerationSumAggregateOutputType = {
 export type MusicGenerationMinAggregateOutputType = {
   id: string | null
   userId: string | null
+  source: string | null
   provider: string | null
   model: string | null
   prompt: string | null
@@ -68,6 +69,7 @@ export type MusicGenerationMinAggregateOutputType = {
 export type MusicGenerationMaxAggregateOutputType = {
   id: string | null
   userId: string | null
+  source: string | null
   provider: string | null
   model: string | null
   prompt: string | null
@@ -95,6 +97,7 @@ export type MusicGenerationMaxAggregateOutputType = {
 export type MusicGenerationCountAggregateOutputType = {
   id: number
   userId: number
+  source: number
   provider: number
   model: number
   prompt: number
@@ -136,6 +139,7 @@ export type MusicGenerationSumAggregateInputType = {
 export type MusicGenerationMinAggregateInputType = {
   id?: true
   userId?: true
+  source?: true
   provider?: true
   model?: true
   prompt?: true
@@ -163,6 +167,7 @@ export type MusicGenerationMinAggregateInputType = {
 export type MusicGenerationMaxAggregateInputType = {
   id?: true
   userId?: true
+  source?: true
   provider?: true
   model?: true
   prompt?: true
@@ -190,6 +195,7 @@ export type MusicGenerationMaxAggregateInputType = {
 export type MusicGenerationCountAggregateInputType = {
   id?: true
   userId?: true
+  source?: true
   provider?: true
   model?: true
   prompt?: true
@@ -304,9 +310,10 @@ export type MusicGenerationGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 export type MusicGenerationGroupByOutputType = {
   id: string
   userId: string
+  source: string
   provider: string
   model: string | null
-  prompt: string
+  prompt: string | null
   lyrics: string | null
   durationMs: number | null
   outputFormat: string | null
@@ -354,9 +361,10 @@ export type MusicGenerationWhereInput = {
   NOT?: Prisma.MusicGenerationWhereInput | Prisma.MusicGenerationWhereInput[]
   id?: Prisma.StringFilter<"MusicGeneration"> | string
   userId?: Prisma.StringFilter<"MusicGeneration"> | string
+  source?: Prisma.StringFilter<"MusicGeneration"> | string
   provider?: Prisma.StringFilter<"MusicGeneration"> | string
   model?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
-  prompt?: Prisma.StringFilter<"MusicGeneration"> | string
+  prompt?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
   lyrics?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
   durationMs?: Prisma.IntNullableFilter<"MusicGeneration"> | number | null
   outputFormat?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
@@ -383,9 +391,10 @@ export type MusicGenerationWhereInput = {
 export type MusicGenerationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
-  prompt?: Prisma.SortOrder
+  prompt?: Prisma.SortOrderInput | Prisma.SortOrder
   lyrics?: Prisma.SortOrderInput | Prisma.SortOrder
   durationMs?: Prisma.SortOrderInput | Prisma.SortOrder
   outputFormat?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -415,9 +424,10 @@ export type MusicGenerationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.MusicGenerationWhereInput[]
   NOT?: Prisma.MusicGenerationWhereInput | Prisma.MusicGenerationWhereInput[]
   userId?: Prisma.StringFilter<"MusicGeneration"> | string
+  source?: Prisma.StringFilter<"MusicGeneration"> | string
   provider?: Prisma.StringFilter<"MusicGeneration"> | string
   model?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
-  prompt?: Prisma.StringFilter<"MusicGeneration"> | string
+  prompt?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
   lyrics?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
   durationMs?: Prisma.IntNullableFilter<"MusicGeneration"> | number | null
   outputFormat?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
@@ -444,9 +454,10 @@ export type MusicGenerationWhereUniqueInput = Prisma.AtLeast<{
 export type MusicGenerationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
-  prompt?: Prisma.SortOrder
+  prompt?: Prisma.SortOrderInput | Prisma.SortOrder
   lyrics?: Prisma.SortOrderInput | Prisma.SortOrder
   durationMs?: Prisma.SortOrderInput | Prisma.SortOrder
   outputFormat?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -479,9 +490,10 @@ export type MusicGenerationScalarWhereWithAggregatesInput = {
   NOT?: Prisma.MusicGenerationScalarWhereWithAggregatesInput | Prisma.MusicGenerationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"MusicGeneration"> | string
   userId?: Prisma.StringWithAggregatesFilter<"MusicGeneration"> | string
+  source?: Prisma.StringWithAggregatesFilter<"MusicGeneration"> | string
   provider?: Prisma.StringWithAggregatesFilter<"MusicGeneration"> | string
   model?: Prisma.StringNullableWithAggregatesFilter<"MusicGeneration"> | string | null
-  prompt?: Prisma.StringWithAggregatesFilter<"MusicGeneration"> | string
+  prompt?: Prisma.StringNullableWithAggregatesFilter<"MusicGeneration"> | string | null
   lyrics?: Prisma.StringNullableWithAggregatesFilter<"MusicGeneration"> | string | null
   durationMs?: Prisma.IntNullableWithAggregatesFilter<"MusicGeneration"> | number | null
   outputFormat?: Prisma.StringNullableWithAggregatesFilter<"MusicGeneration"> | string | null
@@ -505,9 +517,10 @@ export type MusicGenerationScalarWhereWithAggregatesInput = {
 
 export type MusicGenerationCreateInput = {
   id?: string
+  source?: string
   provider: string
   model?: string | null
-  prompt: string
+  prompt?: string | null
   lyrics?: string | null
   durationMs?: number | null
   outputFormat?: string | null
@@ -534,9 +547,10 @@ export type MusicGenerationCreateInput = {
 export type MusicGenerationUncheckedCreateInput = {
   id?: string
   userId: string
+  source?: string
   provider: string
   model?: string | null
-  prompt: string
+  prompt?: string | null
   lyrics?: string | null
   durationMs?: number | null
   outputFormat?: string | null
@@ -561,9 +575,10 @@ export type MusicGenerationUncheckedCreateInput = {
 
 export type MusicGenerationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lyrics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -590,9 +605,10 @@ export type MusicGenerationUpdateInput = {
 export type MusicGenerationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lyrics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -618,9 +634,10 @@ export type MusicGenerationUncheckedUpdateInput = {
 export type MusicGenerationCreateManyInput = {
   id?: string
   userId: string
+  source?: string
   provider: string
   model?: string | null
-  prompt: string
+  prompt?: string | null
   lyrics?: string | null
   durationMs?: number | null
   outputFormat?: string | null
@@ -644,9 +661,10 @@ export type MusicGenerationCreateManyInput = {
 
 export type MusicGenerationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lyrics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -671,9 +689,10 @@ export type MusicGenerationUpdateManyMutationInput = {
 export type MusicGenerationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lyrics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -708,6 +727,7 @@ export type MusicGenerationOrderByRelationAggregateInput = {
 export type MusicGenerationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
@@ -741,6 +761,7 @@ export type MusicGenerationAvgOrderByAggregateInput = {
 export type MusicGenerationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
@@ -768,6 +789,7 @@ export type MusicGenerationMaxOrderByAggregateInput = {
 export type MusicGenerationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
@@ -879,9 +901,10 @@ export type MusicGenerationUpdateOneWithoutVoiceConversionsNestedInput = {
 
 export type MusicGenerationCreateWithoutUserInput = {
   id?: string
+  source?: string
   provider: string
   model?: string | null
-  prompt: string
+  prompt?: string | null
   lyrics?: string | null
   durationMs?: number | null
   outputFormat?: string | null
@@ -906,9 +929,10 @@ export type MusicGenerationCreateWithoutUserInput = {
 
 export type MusicGenerationUncheckedCreateWithoutUserInput = {
   id?: string
+  source?: string
   provider: string
   model?: string | null
-  prompt: string
+  prompt?: string | null
   lyrics?: string | null
   durationMs?: number | null
   outputFormat?: string | null
@@ -962,9 +986,10 @@ export type MusicGenerationScalarWhereInput = {
   NOT?: Prisma.MusicGenerationScalarWhereInput | Prisma.MusicGenerationScalarWhereInput[]
   id?: Prisma.StringFilter<"MusicGeneration"> | string
   userId?: Prisma.StringFilter<"MusicGeneration"> | string
+  source?: Prisma.StringFilter<"MusicGeneration"> | string
   provider?: Prisma.StringFilter<"MusicGeneration"> | string
   model?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
-  prompt?: Prisma.StringFilter<"MusicGeneration"> | string
+  prompt?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
   lyrics?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
   durationMs?: Prisma.IntNullableFilter<"MusicGeneration"> | number | null
   outputFormat?: Prisma.StringNullableFilter<"MusicGeneration"> | string | null
@@ -988,9 +1013,10 @@ export type MusicGenerationScalarWhereInput = {
 
 export type MusicGenerationCreateWithoutVoiceConversionsInput = {
   id?: string
+  source?: string
   provider: string
   model?: string | null
-  prompt: string
+  prompt?: string | null
   lyrics?: string | null
   durationMs?: number | null
   outputFormat?: string | null
@@ -1016,9 +1042,10 @@ export type MusicGenerationCreateWithoutVoiceConversionsInput = {
 export type MusicGenerationUncheckedCreateWithoutVoiceConversionsInput = {
   id?: string
   userId: string
+  source?: string
   provider: string
   model?: string | null
-  prompt: string
+  prompt?: string | null
   lyrics?: string | null
   durationMs?: number | null
   outputFormat?: string | null
@@ -1058,9 +1085,10 @@ export type MusicGenerationUpdateToOneWithWhereWithoutVoiceConversionsInput = {
 
 export type MusicGenerationUpdateWithoutVoiceConversionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lyrics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1086,9 +1114,10 @@ export type MusicGenerationUpdateWithoutVoiceConversionsInput = {
 export type MusicGenerationUncheckedUpdateWithoutVoiceConversionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lyrics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1112,9 +1141,10 @@ export type MusicGenerationUncheckedUpdateWithoutVoiceConversionsInput = {
 
 export type MusicGenerationCreateManyUserInput = {
   id?: string
+  source?: string
   provider: string
   model?: string | null
-  prompt: string
+  prompt?: string | null
   lyrics?: string | null
   durationMs?: number | null
   outputFormat?: string | null
@@ -1138,9 +1168,10 @@ export type MusicGenerationCreateManyUserInput = {
 
 export type MusicGenerationUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lyrics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1165,9 +1196,10 @@ export type MusicGenerationUpdateWithoutUserInput = {
 
 export type MusicGenerationUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lyrics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1192,9 +1224,10 @@ export type MusicGenerationUncheckedUpdateWithoutUserInput = {
 
 export type MusicGenerationUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lyrics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1250,6 +1283,7 @@ export type MusicGenerationCountOutputTypeCountVoiceConversionsArgs<ExtArgs exte
 export type MusicGenerationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  source?: boolean
   provider?: boolean
   model?: boolean
   prompt?: boolean
@@ -1280,6 +1314,7 @@ export type MusicGenerationSelect<ExtArgs extends runtime.Types.Extensions.Inter
 export type MusicGenerationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  source?: boolean
   provider?: boolean
   model?: boolean
   prompt?: boolean
@@ -1308,6 +1343,7 @@ export type MusicGenerationSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
 export type MusicGenerationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  source?: boolean
   provider?: boolean
   model?: boolean
   prompt?: boolean
@@ -1336,6 +1372,7 @@ export type MusicGenerationSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
 export type MusicGenerationSelectScalar = {
   id?: boolean
   userId?: boolean
+  source?: boolean
   provider?: boolean
   model?: boolean
   prompt?: boolean
@@ -1360,7 +1397,7 @@ export type MusicGenerationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type MusicGenerationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "provider" | "model" | "prompt" | "lyrics" | "durationMs" | "outputFormat" | "settings" | "audioUrl" | "originalAudioUrl" | "audioStored" | "audioDurationMs" | "status" | "error" | "requestId" | "statusUrl" | "responseUrl" | "cancelUrl" | "progress" | "title" | "isFavorite" | "createdAt" | "updatedAt", ExtArgs["result"]["musicGeneration"]>
+export type MusicGenerationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "source" | "provider" | "model" | "prompt" | "lyrics" | "durationMs" | "outputFormat" | "settings" | "audioUrl" | "originalAudioUrl" | "audioStored" | "audioDurationMs" | "status" | "error" | "requestId" | "statusUrl" | "responseUrl" | "cancelUrl" | "progress" | "title" | "isFavorite" | "createdAt" | "updatedAt", ExtArgs["result"]["musicGeneration"]>
 export type MusicGenerationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   voiceConversions?: boolean | Prisma.MusicGeneration$voiceConversionsArgs<ExtArgs>
@@ -1382,9 +1419,10 @@ export type $MusicGenerationPayload<ExtArgs extends runtime.Types.Extensions.Int
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
+    source: string
     provider: string
     model: string | null
-    prompt: string
+    prompt: string | null
     lyrics: string | null
     durationMs: number | null
     outputFormat: string | null
@@ -1831,6 +1869,7 @@ export interface Prisma__MusicGenerationClient<T, Null = never, ExtArgs extends 
 export interface MusicGenerationFieldRefs {
   readonly id: Prisma.FieldRef<"MusicGeneration", 'String'>
   readonly userId: Prisma.FieldRef<"MusicGeneration", 'String'>
+  readonly source: Prisma.FieldRef<"MusicGeneration", 'String'>
   readonly provider: Prisma.FieldRef<"MusicGeneration", 'String'>
   readonly model: Prisma.FieldRef<"MusicGeneration", 'String'>
   readonly prompt: Prisma.FieldRef<"MusicGeneration", 'String'>
