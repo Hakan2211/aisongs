@@ -9,6 +9,9 @@ WORKDIR /app
 # Note: Requires 6-8GB RAM during build (handled by GitHub Actions)
 ENV NODE_OPTIONS="--max-old-space-size=6144"
 
+# Install build tools for native modules (deasync/node-gyp)
+RUN apk add --no-cache python3 make g++
+
 # Copy package files first for better caching
 COPY package*.json ./
 RUN npm ci --legacy-peer-deps
