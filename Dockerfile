@@ -30,12 +30,12 @@ RUN node --max-old-space-size=6144 node_modules/vite/bin/vite.js build
 FROM node:22-alpine
 WORKDIR /app
 
-# Install curl for healthcheck
-RUN apk add --no-cache curl
+# Install curl for healthcheck and build tools for native modules (deasync/node-gyp)
+RUN apk add --no-cache curl python3 make g++
 
 # Copy package files and install production dependencies
 COPY package*.json ./
-RUN npm ci --omit=dev --legacy-peer-deps
+RUN npm ci --omit=dev --legacy-peer-deps && apk del python3 make g++
 
 # Install tsx for running seed script (needed at runtime)
 RUN npm install -g tsx
